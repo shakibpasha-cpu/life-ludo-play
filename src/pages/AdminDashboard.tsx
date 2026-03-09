@@ -46,7 +46,7 @@ const STATUS_COLORS: Record<LeadStatus, string> = {
   closed: "bg-muted text-muted-foreground",
 };
 
-type TabType = "leads" | "calendar" | "reminders" | "gallery";
+type TabType = "leads" | "calendar" | "reminders" | "gallery" | "orders";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();

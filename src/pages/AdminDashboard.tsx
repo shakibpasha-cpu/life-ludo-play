@@ -11,7 +11,7 @@ import type { Tables } from "@/integrations/supabase/types";
 import {
   Dices, LogOut, Search, Filter, Users, CalendarDays,
   TrendingUp, Clock, MessageSquare, ChevronDown, Trash2,
-  Bell, CheckCircle, Plus, X, List, CalendarIcon, Image
+  Bell, CheckCircle, Plus, X, List, CalendarIcon, Image, ShoppingCart
 } from "lucide-react";
 import GalleryManager from "@/components/admin/GalleryManager";
 

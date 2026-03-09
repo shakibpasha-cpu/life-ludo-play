@@ -1,4 +1,5 @@
-import { Dices } from "lucide-react";
+import { Dices, Lock } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (

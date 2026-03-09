@@ -91,8 +91,10 @@ const PlayPage = () => {
 
   const handleMovePiece = useCallback((idx: number) => {
     if (gameState.rolling || !gameState.diceValue) return;
+    const piece = gameState.pieces[idx];
+    if (piece.position === -1) playPieceOut(); else playPieceMove();
     setGameState(prev => movePiece(prev, idx, prev.diceValue!));
-  }, [gameState.rolling, gameState.diceValue]);
+  }, [gameState.rolling, gameState.diceValue, gameState.pieces]);
 
   // Auto-roll for AI teams
   useEffect(() => {

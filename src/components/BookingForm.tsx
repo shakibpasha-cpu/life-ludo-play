@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 const eventTypes = ["Corporate Team Building", "Family Event", "Wedding", "School Activity", "Festival", "Birthday Party"];
 
@@ -11,19 +12,41 @@ const BookingForm = () => {
   const [form, setForm] = useState({
     name: "", phone: "", email: "", city: "", eventType: "", eventDate: "", participants: "", message: "",
   });
+  const [submitting, setSubmitting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name || !form.phone || !form.email) {
       toast.error("Please fill in required fields");
       return;
     }
+    setSubmitting(true);
+
+    const { error } = await supabase.from("leads").insert({
+      name: form.name,
+      phone: form.phone,
+      email: form.email,
+      city: form.city || null,
+      event_type: form.eventType || null,
+      event_date: form.eventDate || null,
+      participants: form.participants ? parseInt(form.participants) : null,
+      message: form.message || null,
+      source: "website",
+    });
+
+    if (error) {
+      toast.error("Something went wrong. Please try again.");
+      setSubmitting(false);
+      return;
+    }
+
     toast.success("Thank you! We'll get back to you shortly 🎲");
     setForm({ name: "", phone: "", email: "", city: "", eventType: "", eventDate: "", participants: "", message: "" });
+    setSubmitting(false);
   };
 
   return (
@@ -67,8 +90,8 @@ const BookingForm = () => {
           </div>
           <Textarea name="message" placeholder="Tell us about your event..." value={form.message} onChange={handleChange} className="bg-background/50 border-border min-h-[100px]" />
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button type="submit" variant="hero" size="lg" className="flex-1">
-              🎯 Request Quote
+            <Button type="submit" variant="hero" size="lg" className="flex-1" disabled={submitting}>
+              {submitting ? "Submitting..." : "🎯 Request Quote"}
             </Button>
             <Button type="button" variant="heroOutline" size="lg" className="flex-1" onClick={() => {
               toast.info("Demo booking request sent!");

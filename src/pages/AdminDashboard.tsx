@@ -659,6 +659,9 @@ const AdminDashboard = () => {
             )}
           </div>
         )}
+
+        {/* GALLERY TAB */}
+        {activeTab === "gallery" && <GalleryManager />}
       </div>
     </div>
   );

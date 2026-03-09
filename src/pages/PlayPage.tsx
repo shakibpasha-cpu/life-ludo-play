@@ -109,6 +109,7 @@ const PlayPage = () => {
   // Check for game over
   useEffect(() => {
     if (gameState.gameOver && !showEndScreen) {
+      playVictory();
       setTimeout(() => setShowEndScreen(true), 1500);
     }
   }, [gameState.gameOver, showEndScreen]);

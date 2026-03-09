@@ -279,6 +279,7 @@ const AdminDashboard = () => {
         <div className="flex gap-2 border-b border-border pb-0">
           {([
             { id: "leads" as TabType, label: "Leads", icon: List },
+            { id: "orders" as TabType, label: "Orders", icon: ShoppingCart },
             { id: "calendar" as TabType, label: "Calendar", icon: CalendarIcon },
             { id: "reminders" as TabType, label: "Follow-ups", icon: Bell },
             { id: "gallery" as TabType, label: "Gallery", icon: Image },

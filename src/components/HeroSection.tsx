@@ -83,7 +83,7 @@ const HeroSection = () => {
           <Button variant="hero" size="xl" onClick={scrollToBooking}>
             🎯 Book Your Event
           </Button>
-          <Button variant="heroOutline" size="xl" onClick={scrollToDemo}>
+          <Button variant="heroOutline" size="xl" onClick={goToDemo}>
             🎮 Try Live Demo
           </Button>
         </motion.div>

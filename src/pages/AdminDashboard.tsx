@@ -281,6 +281,7 @@ const AdminDashboard = () => {
             { id: "leads" as TabType, label: "Leads", icon: List },
             { id: "calendar" as TabType, label: "Calendar", icon: CalendarIcon },
             { id: "reminders" as TabType, label: "Follow-ups", icon: Bell },
+            { id: "gallery" as TabType, label: "Gallery", icon: Image },
           ]).map(tab => (
             <button
               key={tab.id}

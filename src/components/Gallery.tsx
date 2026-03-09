@@ -1,24 +1,50 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { supabase } from "@/integrations/supabase/client";
 import heroImage from "@/assets/hero-ludo.jpg";
 
-const categories = ["All", "Family Events", "Corporate Events", "School Events", "Festivals"];
+interface GalleryItem {
+  id: string;
+  title: string;
+  category: string;
+  image_url: string;
+}
 
-// Using the hero image as sample gallery items
-const galleryItems = [
-  { src: heroImage, category: "Family Events", title: "Family Fun Day" },
-  { src: heroImage, category: "Corporate Events", title: "Team Building Session" },
-  { src: heroImage, category: "School Events", title: "School Sports Day" },
-  { src: heroImage, category: "Festivals", title: "Festival Entertainment" },
-  { src: heroImage, category: "Family Events", title: "Weekend Gaming" },
-  { src: heroImage, category: "Corporate Events", title: "Office Party" },
-];
+const fallbackItems: GalleryItem[] = [
+  { id: "1", src: heroImage, category: "Family Events", title: "Family Fun Day" } as any,
+  { id: "2", src: heroImage, category: "Corporate Events", title: "Team Building Session" } as any,
+  { id: "3", src: heroImage, category: "School Events", title: "School Sports Day" } as any,
+  { id: "4", src: heroImage, category: "Festivals", title: "Festival Entertainment" } as any,
+  { id: "5", src: heroImage, category: "Family Events", title: "Weekend Gaming" } as any,
+  { id: "6", src: heroImage, category: "Corporate Events", title: "Office Party" } as any,
+].map(item => ({ ...item, image_url: item.src || heroImage }));
 
 const Gallery = () => {
+  const [items, setItems] = useState<GalleryItem[]>(fallbackItems);
+  const [categories, setCategories] = useState<string[]>(["All"]);
   const [active, setActive] = useState("All");
   const [lightbox, setLightbox] = useState<number | null>(null);
 
-  const filtered = active === "All" ? galleryItems : galleryItems.filter(g => g.category === active);
+  useEffect(() => {
+    const fetchGallery = async () => {
+      const { data } = await supabase
+        .from("gallery_items")
+        .select("id, title, category, image_url")
+        .eq("visible", true)
+        .order("sort_order", { ascending: true });
+      if (data && data.length > 0) {
+        setItems(data as GalleryItem[]);
+        const cats = ["All", ...Array.from(new Set(data.map((d: any) => d.category)))];
+        setCategories(cats);
+      } else {
+        const cats = ["All", ...Array.from(new Set(fallbackItems.map(d => d.category)))];
+        setCategories(cats);
+      }
+    };
+    fetchGallery();
+  }, []);
+
+  const filtered = active === "All" ? items : items.filter(g => g.category === active);
 
   return (
     <section className="py-24 px-4" id="gallery">
@@ -53,7 +79,7 @@ const Gallery = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered.map((item, i) => (
             <motion.div
-              key={i}
+              key={item.id}
               layout
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -62,7 +88,7 @@ const Gallery = () => {
               onClick={() => setLightbox(i)}
             >
               <img
-                src={item.src}
+                src={item.image_url}
                 alt={item.title}
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
               />
@@ -74,7 +100,6 @@ const Gallery = () => {
         </div>
       </div>
 
-      {/* Lightbox */}
       {lightbox !== null && (
         <div
           className="fixed inset-0 z-50 bg-background/90 backdrop-blur-md flex items-center justify-center p-4"
@@ -83,7 +108,7 @@ const Gallery = () => {
           <motion.img
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            src={filtered[lightbox]?.src}
+            src={filtered[lightbox]?.image_url}
             alt={filtered[lightbox]?.title}
             className="max-w-full max-h-[80vh] rounded-2xl object-contain"
           />

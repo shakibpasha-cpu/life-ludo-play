@@ -11,8 +11,9 @@ import type { Tables } from "@/integrations/supabase/types";
 import {
   Dices, LogOut, Search, Filter, Users, CalendarDays,
   TrendingUp, Clock, MessageSquare, ChevronDown, Trash2,
-  Bell, CheckCircle, Plus, X, List, CalendarIcon
+  Bell, CheckCircle, Plus, X, List, CalendarIcon, Image
 } from "lucide-react";
+import GalleryManager from "@/components/admin/GalleryManager";
 
 type Lead = Tables<"leads">;
 type LeadNote = Tables<"lead_notes">;
@@ -45,7 +46,7 @@ const STATUS_COLORS: Record<LeadStatus, string> = {
   closed: "bg-muted text-muted-foreground",
 };
 
-type TabType = "leads" | "calendar" | "reminders";
+type TabType = "leads" | "calendar" | "reminders" | "gallery";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -280,6 +281,7 @@ const AdminDashboard = () => {
             { id: "leads" as TabType, label: "Leads", icon: List },
             { id: "calendar" as TabType, label: "Calendar", icon: CalendarIcon },
             { id: "reminders" as TabType, label: "Follow-ups", icon: Bell },
+            { id: "gallery" as TabType, label: "Gallery", icon: Image },
           ]).map(tab => (
             <button
               key={tab.id}
@@ -657,6 +659,9 @@ const AdminDashboard = () => {
             )}
           </div>
         )}
+
+        {/* GALLERY TAB */}
+        {activeTab === "gallery" && <GalleryManager />}
       </div>
     </div>
   );

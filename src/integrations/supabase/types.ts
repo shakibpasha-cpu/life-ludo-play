@@ -55,6 +55,39 @@ export type Database = {
           },
         ]
       }
+      gallery_items: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          image_url: string
+          media_type: string
+          sort_order: number
+          title: string
+          visible: boolean
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          id?: string
+          image_url: string
+          media_type?: string
+          sort_order?: number
+          title: string
+          visible?: boolean
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          image_url?: string
+          media_type?: string
+          sort_order?: number
+          title?: string
+          visible?: boolean
+        }
+        Relationships: []
+      }
       lead_notes: {
         Row: {
           created_at: string

@@ -51,16 +51,19 @@ const PlayPage = () => {
     let count = 0;
     const interval = setInterval(() => {
       setGameState(prev => ({ ...prev, diceValue: rollDice() }));
+      playDiceRollTick();
       count++;
       if (count > 12) {
         clearInterval(interval);
         const finalValue = rollDice();
+        playDiceResult();
         setGameState(prev => {
           const newState = { ...prev, diceValue: finalValue, rolling: false };
           const movable = getMovablePieces(newState, finalValue);
 
           // If no movable pieces, skip to next team
           if (movable.length === 0) {
+            playNoMove();
             return { ...newState, currentTeam: getNextTeam(prev.currentTeam) };
           }
 
@@ -71,6 +74,8 @@ const PlayPage = () => {
                 const m = getMovablePieces(s, finalValue);
                 if (m.length > 0) {
                   const randomPiece = m[Math.floor(Math.random() * m.length)];
+                  const piece = s.pieces[randomPiece];
+                  if (piece.position === -1) playPieceOut(); else playPieceMove();
                   return movePiece(s, randomPiece, finalValue);
                 }
                 return { ...s, currentTeam: getNextTeam(s.currentTeam) };

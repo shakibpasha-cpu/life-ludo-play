@@ -1,14 +1,16 @@
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import heroImage from "@/assets/hero-ludo.jpg";
 import diceImage from "@/assets/dice.png";
 
 const HeroSection = () => {
+  const navigate = useNavigate();
   const scrollToBooking = () => {
     document.getElementById("booking")?.scrollIntoView({ behavior: "smooth" });
   };
-  const scrollToDemo = () => {
-    document.getElementById("demo")?.scrollIntoView({ behavior: "smooth" });
+  const goToDemo = () => {
+    navigate("/play");
   };
 
   return (
@@ -81,7 +83,7 @@ const HeroSection = () => {
           <Button variant="hero" size="xl" onClick={scrollToBooking}>
             🎯 Book Your Event
           </Button>
-          <Button variant="heroOutline" size="xl" onClick={scrollToDemo}>
+          <Button variant="heroOutline" size="xl" onClick={goToDemo}>
             🎮 Try Live Demo
           </Button>
         </motion.div>

@@ -11,7 +11,7 @@ import type { Tables } from "@/integrations/supabase/types";
 import {
   Dices, LogOut, Search, Filter, Users, CalendarDays,
   TrendingUp, Clock, MessageSquare, ChevronDown, Trash2,
-  Bell, CheckCircle, Plus, X, List, CalendarIcon, Image
+  Bell, CheckCircle, Plus, X, List, CalendarIcon, Image, ShoppingCart
 } from "lucide-react";
 import GalleryManager from "@/components/admin/GalleryManager";
 
@@ -46,7 +46,7 @@ const STATUS_COLORS: Record<LeadStatus, string> = {
   closed: "bg-muted text-muted-foreground",
 };
 
-type TabType = "leads" | "calendar" | "reminders" | "gallery";
+type TabType = "leads" | "calendar" | "reminders" | "gallery" | "orders";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -279,6 +279,7 @@ const AdminDashboard = () => {
         <div className="flex gap-2 border-b border-border pb-0">
           {([
             { id: "leads" as TabType, label: "Leads", icon: List },
+            { id: "orders" as TabType, label: "Orders", icon: ShoppingCart },
             { id: "calendar" as TabType, label: "Calendar", icon: CalendarIcon },
             { id: "reminders" as TabType, label: "Follow-ups", icon: Bell },
             { id: "gallery" as TabType, label: "Gallery", icon: Image },
@@ -452,6 +453,71 @@ const AdminDashboard = () => {
               </div>
             </div>
           </>
+        )}
+
+        {/* ORDERS TAB */}
+        {activeTab === "orders" && (
+          <div className="space-y-4">
+            <h3 className="font-display font-bold text-lg">Confirmed Orders</h3>
+            {leads.filter(l => l.status === "confirmed_booking").length === 0 ? (
+              <div className="glass-card rounded-xl p-10 text-center">
+                <ShoppingCart className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
+                <p className="text-muted-foreground">No confirmed orders yet</p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto glass-card rounded-xl">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-border text-left">
+                      <th className="p-4 font-display font-bold text-muted-foreground">Client</th>
+                      <th className="p-4 font-display font-bold text-muted-foreground">Event Type</th>
+                      <th className="p-4 font-display font-bold text-muted-foreground">Event Date</th>
+                      <th className="p-4 font-display font-bold text-muted-foreground">City</th>
+                      <th className="p-4 font-display font-bold text-muted-foreground">Participants</th>
+                      <th className="p-4 font-display font-bold text-muted-foreground">Contact</th>
+                      <th className="p-4 font-display font-bold text-muted-foreground">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {leads.filter(l => l.status === "confirmed_booking").map(order => (
+                      <tr key={order.id} className="border-b border-border/50 hover:bg-muted/30 transition-colors">
+                        <td className="p-4 font-bold">{order.name}</td>
+                        <td className="p-4">{order.event_type || "—"}</td>
+                        <td className="p-4">
+                          {order.event_date ? format(new Date(order.event_date), "MMM d, yyyy") : "—"}
+                        </td>
+                        <td className="p-4">{order.city || "—"}</td>
+                        <td className="p-4">{order.participants || "—"}</td>
+                        <td className="p-4">
+                          <div className="text-xs space-y-0.5">
+                            <p>{order.email}</p>
+                            <p className="text-muted-foreground">{order.phone}</p>
+                          </div>
+                        </td>
+                        <td className="p-4">
+                          <div className="flex items-center gap-2">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => { setActiveTab("leads"); selectLead(order); }}
+                            >
+                              View
+                            </Button>
+                            <button
+                              onClick={() => updateStatus(order.id, "closed")}
+                              className="px-3 py-1 rounded-full text-xs font-bold bg-muted text-muted-foreground hover:bg-muted/80 transition-colors"
+                            >
+                              Mark Closed
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
         )}
 
         {/* CALENDAR TAB */}

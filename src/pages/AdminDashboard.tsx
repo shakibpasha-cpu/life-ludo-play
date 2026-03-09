@@ -11,8 +11,9 @@ import type { Tables } from "@/integrations/supabase/types";
 import {
   Dices, LogOut, Search, Filter, Users, CalendarDays,
   TrendingUp, Clock, MessageSquare, ChevronDown, Trash2,
-  Bell, CheckCircle, Plus, X, List, CalendarIcon
+  Bell, CheckCircle, Plus, X, List, CalendarIcon, Image
 } from "lucide-react";
+import GalleryManager from "@/components/admin/GalleryManager";
 
 type Lead = Tables<"leads">;
 type LeadNote = Tables<"lead_notes">;

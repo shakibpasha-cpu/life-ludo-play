@@ -1,0 +1,58 @@
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Menu, X, Dices } from "lucide-react";
+
+const links = [
+  { label: "How It Works", href: "#how-it-works" },
+  { label: "Events", href: "#events" },
+  { label: "Gallery", href: "#gallery" },
+  { label: "Demo", href: "#demo" },
+  { label: "Book Now", href: "#booking" },
+  { label: "Contact", href: "#contact" },
+];
+
+const Navbar = () => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/50">
+      <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+        <a href="#" className="flex items-center gap-2 font-display font-bold text-xl">
+          <Dices className="w-7 h-7 text-primary" />
+          <span>Human Size <span className="text-primary">Ludo</span></span>
+        </a>
+
+        {/* Desktop */}
+        <div className="hidden md:flex items-center gap-6">
+          {links.map(l => (
+            <a key={l.label} href={l.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors font-body">
+              {l.label}
+            </a>
+          ))}
+        </div>
+
+        {/* Mobile toggle */}
+        <button onClick={() => setOpen(!open)} className="md:hidden text-foreground">
+          {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
+      </div>
+
+      {/* Mobile menu */}
+      {open && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="md:hidden bg-background border-b border-border px-4 pb-4"
+        >
+          {links.map(l => (
+            <a key={l.label} href={l.href} onClick={() => setOpen(false)} className="block py-3 text-muted-foreground hover:text-foreground transition-colors font-body">
+              {l.label}
+            </a>
+          ))}
+        </motion.div>
+      )}
+    </nav>
+  );
+};
+
+export default Navbar;

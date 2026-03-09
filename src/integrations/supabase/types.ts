@@ -14,6 +14,47 @@ export type Database = {
   }
   public: {
     Tables: {
+      follow_up_reminders: {
+        Row: {
+          completed: boolean
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          lead_id: string
+          reminder_date: string
+          title: string
+        }
+        Insert: {
+          completed?: boolean
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          lead_id: string
+          reminder_date: string
+          title: string
+        }
+        Update: {
+          completed?: boolean
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          lead_id?: string
+          reminder_date?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "follow_up_reminders_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lead_notes: {
         Row: {
           created_at: string

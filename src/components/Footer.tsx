@@ -1,4 +1,5 @@
-import { Dices } from "lucide-react";
+import { Dices, Lock } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -33,8 +34,11 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        <div className="border-t border-border pt-6 text-center text-muted-foreground text-sm">
-          © {new Date().getFullYear()} Human Size Ludo Experience. All rights reserved.
+        <div className="border-t border-border pt-6 flex items-center justify-between text-muted-foreground text-sm">
+          <span>© {new Date().getFullYear()} Human Size Ludo Experience. All rights reserved.</span>
+          <Link to="/admin" className="flex items-center gap-1.5 hover:text-foreground transition-colors text-xs">
+            <Lock className="w-3 h-3" /> Admin
+          </Link>
         </div>
       </div>
     </footer>

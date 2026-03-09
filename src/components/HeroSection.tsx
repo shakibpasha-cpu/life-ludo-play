@@ -1,0 +1,104 @@
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import heroImage from "@/assets/hero-ludo.jpg";
+import diceImage from "@/assets/dice.png";
+
+const HeroSection = () => {
+  const scrollToBooking = () => {
+    document.getElementById("booking")?.scrollIntoView({ behavior: "smooth" });
+  };
+  const scrollToDemo = () => {
+    document.getElementById("demo")?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  return (
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Background image */}
+      <div className="absolute inset-0">
+        <img
+          src={heroImage}
+          alt="Human Size Ludo Experience - Giant Ludo board with people playing"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-background/70 backdrop-blur-sm" />
+        <div className="absolute inset-0" style={{ background: "var(--gradient-hero)" }} />
+      </div>
+
+      {/* Floating dice */}
+      <motion.img
+        src={diceImage}
+        alt="Colorful dice"
+        className="absolute top-20 right-10 w-20 h-20 md:w-32 md:h-32 opacity-80"
+        animate={{ y: [0, -20, 0], rotate: [0, 10, 0] }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.img
+        src={diceImage}
+        alt="Colorful dice"
+        className="absolute bottom-32 left-10 w-16 h-16 md:w-24 md:h-24 opacity-60"
+        animate={{ y: [0, -15, 0], rotate: [0, -15, 0] }}
+        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+      />
+
+      {/* Content */}
+      <div className="relative z-10 text-center px-4 max-w-5xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <span className="inline-block px-4 py-2 rounded-full bg-secondary border border-border text-sm font-body text-muted-foreground mb-6">
+            🎲 India's Most Exciting Life-Size Game
+          </span>
+        </motion.div>
+
+        <motion.h1
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="text-4xl md:text-6xl lg:text-7xl font-display font-black leading-tight mb-6"
+        >
+          Step Into The Game –{" "}
+          <span className="text-gradient-ludo">Become The Ludo Piece!</span>
+        </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-10"
+        >
+          Experience the world's most exciting life-size Ludo game for families,
+          corporate events, and celebrations.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="flex flex-col sm:flex-row gap-4 justify-center"
+        >
+          <Button variant="hero" size="xl" onClick={scrollToBooking}>
+            🎯 Book Your Event
+          </Button>
+          <Button variant="heroOutline" size="xl" onClick={scrollToDemo}>
+            🎮 Try Live Demo
+          </Button>
+        </motion.div>
+      </div>
+
+      {/* Scroll indicator */}
+      <motion.div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        animate={{ y: [0, 10, 0] }}
+        transition={{ duration: 2, repeat: Infinity }}
+      >
+        <div className="w-6 h-10 rounded-full border-2 border-primary/50 flex items-start justify-center p-2">
+          <div className="w-1.5 h-3 rounded-full bg-primary" />
+        </div>
+      </motion.div>
+    </section>
+  );
+};
+
+export default HeroSection;

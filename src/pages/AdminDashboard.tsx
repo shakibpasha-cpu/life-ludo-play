@@ -1,20 +1,33 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Calendar } from "@/components/ui/calendar";
 import { toast } from "sonner";
-import { format } from "date-fns";
+import { format, startOfMonth, endOfMonth, isSameDay, isAfter } from "date-fns";
 import type { Tables } from "@/integrations/supabase/types";
 import {
   Dices, LogOut, Search, Filter, Users, CalendarDays,
-  TrendingUp, Clock, MessageSquare, ChevronDown, Trash2
+  TrendingUp, Clock, MessageSquare, ChevronDown, Trash2,
+  Bell, CheckCircle, Plus, X, List, CalendarIcon
 } from "lucide-react";
 
 type Lead = Tables<"leads">;
 type LeadNote = Tables<"lead_notes">;
 type LeadStatus = Lead["status"];
+
+interface FollowUpReminder {
+  id: string;
+  lead_id: string;
+  reminder_date: string;
+  title: string;
+  description: string | null;
+  completed: boolean;
+  created_by: string | null;
+  created_at: string;
+}
 
 const STATUS_LABELS: Record<LeadStatus, string> = {
   new_lead: "New Lead",
@@ -32,19 +45,33 @@ const STATUS_COLORS: Record<LeadStatus, string> = {
   closed: "bg-muted text-muted-foreground",
 };
 
+type TabType = "leads" | "calendar" | "reminders";
+
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [leads, setLeads] = useState<Lead[]>([]);
   const [notes, setNotes] = useState<Record<string, LeadNote[]>>({});
+  const [reminders, setReminders] = useState<FollowUpReminder[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<LeadStatus | "all">("all");
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [newNote, setNewNote] = useState("");
+  const [activeTab, setActiveTab] = useState<TabType>("leads");
+  const [calendarDate, setCalendarDate] = useState<Date>(new Date());
+  const [selectedCalDate, setSelectedCalDate] = useState<Date | undefined>(new Date());
+  
+  // Reminder form
+  const [showReminderForm, setShowReminderForm] = useState(false);
+  const [reminderLeadId, setReminderLeadId] = useState("");
+  const [reminderTitle, setReminderTitle] = useState("");
+  const [reminderDesc, setReminderDesc] = useState("");
+  const [reminderDate, setReminderDate] = useState("");
 
   useEffect(() => {
     checkAuth();
     fetchLeads();
+    fetchReminders();
   }, []);
 
   const checkAuth = async () => {
@@ -59,10 +86,18 @@ const AdminDashboard = () => {
       .from("leads")
       .select("*")
       .order("created_at", { ascending: false });
-    
     if (error) { toast.error("Failed to load leads"); return; }
     setLeads(data || []);
     setLoading(false);
+  };
+
+  const fetchReminders = async () => {
+    const { data, error } = await supabase
+      .from("follow_up_reminders")
+      .select("*")
+      .order("reminder_date", { ascending: true });
+    if (error) { toast.error("Failed to load reminders"); return; }
+    setReminders((data as FollowUpReminder[]) || []);
   };
 
   const fetchNotes = async (leadId: string) => {
@@ -71,16 +106,11 @@ const AdminDashboard = () => {
       .select("*")
       .eq("lead_id", leadId)
       .order("created_at", { ascending: false });
-    
     setNotes(prev => ({ ...prev, [leadId]: data || [] }));
   };
 
   const updateStatus = async (leadId: string, status: LeadStatus) => {
-    const { error } = await supabase
-      .from("leads")
-      .update({ status })
-      .eq("id", leadId);
-    
+    const { error } = await supabase.from("leads").update({ status }).eq("id", leadId);
     if (error) { toast.error("Failed to update"); return; }
     setLeads(prev => prev.map(l => l.id === leadId ? { ...l, status } : l));
     toast.success("Status updated");
@@ -89,11 +119,9 @@ const AdminDashboard = () => {
   const addNote = async () => {
     if (!selectedLead || !newNote.trim()) return;
     const { data: { user } } = await supabase.auth.getUser();
-    
     const { error } = await supabase
       .from("lead_notes")
       .insert({ lead_id: selectedLead.id, note: newNote, created_by: user?.id || null });
-    
     if (error) { toast.error("Failed to add note"); return; }
     setNewNote("");
     fetchNotes(selectedLead.id);
@@ -108,13 +136,52 @@ const AdminDashboard = () => {
     toast.success("Lead deleted");
   };
 
+  const addReminder = async () => {
+    if (!reminderLeadId || !reminderTitle.trim() || !reminderDate) {
+      toast.error("Please fill in lead, title and date");
+      return;
+    }
+    const { data: { user } } = await supabase.auth.getUser();
+    const { error } = await supabase.from("follow_up_reminders").insert({
+      lead_id: reminderLeadId,
+      title: reminderTitle,
+      description: reminderDesc || null,
+      reminder_date: new Date(reminderDate).toISOString(),
+      created_by: user?.id || null,
+    });
+    if (error) { toast.error("Failed to add reminder"); return; }
+    setShowReminderForm(false);
+    setReminderLeadId("");
+    setReminderTitle("");
+    setReminderDesc("");
+    setReminderDate("");
+    fetchReminders();
+    toast.success("Reminder added");
+  };
+
+  const toggleReminderComplete = async (id: string, completed: boolean) => {
+    const { error } = await supabase
+      .from("follow_up_reminders")
+      .update({ completed: !completed })
+      .eq("id", id);
+    if (error) { toast.error("Failed to update"); return; }
+    setReminders(prev => prev.map(r => r.id === id ? { ...r, completed: !completed } : r));
+  };
+
+  const deleteReminder = async (id: string) => {
+    const { error } = await supabase.from("follow_up_reminders").delete().eq("id", id);
+    if (error) { toast.error("Failed to delete"); return; }
+    setReminders(prev => prev.filter(r => r.id !== id));
+    toast.success("Reminder deleted");
+  };
+
   const handleLogout = async () => {
     await supabase.auth.signOut();
     navigate("/admin");
   };
 
   const filtered = leads.filter(l => {
-    const matchSearch = !searchTerm || 
+    const matchSearch = !searchTerm ||
       l.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       l.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       l.phone.includes(searchTerm);
@@ -132,11 +199,33 @@ const AdminDashboard = () => {
   const confirmed = leads.filter(l => l.status === "confirmed_booking").length;
   const conversionRate = totalLeads > 0 ? ((confirmed / totalLeads) * 100).toFixed(1) : "0";
   const upcoming = leads.filter(l => l.event_date && new Date(l.event_date) > new Date()).length;
+  const pendingReminders = reminders.filter(r => !r.completed && new Date(r.reminder_date) >= new Date()).length;
 
   const selectLead = (lead: Lead) => {
     setSelectedLead(lead);
     fetchNotes(lead.id);
   };
+
+  // Calendar helpers
+  const eventDates = useMemo(() => {
+    const dates: Date[] = [];
+    leads.forEach(l => { if (l.event_date) dates.push(new Date(l.event_date)); });
+    reminders.forEach(r => dates.push(new Date(r.reminder_date)));
+    return dates;
+  }, [leads, reminders]);
+
+  const selectedDateEvents = useMemo(() => {
+    if (!selectedCalDate) return { events: [] as Lead[], dayReminders: [] as FollowUpReminder[] };
+    const events = leads.filter(l => l.event_date && isSameDay(new Date(l.event_date), selectedCalDate));
+    const dayReminders = reminders.filter(r => isSameDay(new Date(r.reminder_date), selectedCalDate));
+    return { events, dayReminders };
+  }, [selectedCalDate, leads, reminders]);
+
+  const leadNameMap = useMemo(() => {
+    const map: Record<string, string> = {};
+    leads.forEach(l => { map[l.id] = l.name; });
+    return map;
+  }, [leads]);
 
   if (loading) {
     return (
@@ -169,12 +258,13 @@ const AdminDashboard = () => {
 
       <div className="max-w-7xl mx-auto p-4 space-y-6">
         {/* Analytics Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {[
             { icon: Users, label: "Total Leads", value: totalLeads, color: "text-ludo-blue" },
             { icon: CalendarDays, label: "This Month", value: thisMonth, color: "text-ludo-green" },
             { icon: TrendingUp, label: "Conversion", value: `${conversionRate}%`, color: "text-primary" },
             { icon: Clock, label: "Upcoming Events", value: upcoming, color: "text-ludo-red" },
+            { icon: Bell, label: "Pending Reminders", value: pendingReminders, color: "text-ludo-yellow" },
           ].map(stat => (
             <div key={stat.label} className="glass-card rounded-xl p-5">
               <stat.icon className={`w-6 h-6 mb-2 ${stat.color}`} />
@@ -184,160 +274,389 @@ const AdminDashboard = () => {
           ))}
         </div>
 
-        {/* Filters */}
-        <div className="flex flex-col sm:flex-row gap-3">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
-            <Input
-              placeholder="Search by name, email, phone..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 bg-card h-10"
-            />
-          </div>
-          <div className="relative">
-            <Filter className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value as LeadStatus | "all")}
-              className="h-10 rounded-lg border border-border bg-card pl-10 pr-8 text-sm text-foreground appearance-none"
+        {/* Tabs */}
+        <div className="flex gap-2 border-b border-border pb-0">
+          {([
+            { id: "leads" as TabType, label: "Leads", icon: List },
+            { id: "calendar" as TabType, label: "Calendar", icon: CalendarIcon },
+            { id: "reminders" as TabType, label: "Follow-ups", icon: Bell },
+          ]).map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center gap-2 px-4 py-2.5 text-sm font-bold border-b-2 transition-colors -mb-px ${
+                activeTab === tab.id
+                  ? "border-primary text-primary"
+                  : "border-transparent text-muted-foreground hover:text-foreground"
+              }`}
             >
-              <option value="all">All Status</option>
-              {Object.entries(STATUS_LABELS).map(([k, v]) => (
-                <option key={k} value={k}>{v}</option>
-              ))}
-            </select>
-            <ChevronDown className="absolute right-2 top-3 w-4 h-4 text-muted-foreground pointer-events-none" />
-          </div>
+              <tab.icon className="w-4 h-4" />
+              {tab.label}
+            </button>
+          ))}
         </div>
 
-        {/* Main content */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Lead list */}
-          <div className="lg:col-span-2 space-y-3">
-            {filtered.length === 0 ? (
-              <div className="glass-card rounded-xl p-10 text-center">
-                <Users className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
-                <p className="text-muted-foreground">No leads found</p>
+        {/* LEADS TAB */}
+        {activeTab === "leads" && (
+          <>
+            {/* Filters */}
+            <div className="flex flex-col sm:flex-row gap-3">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search by name, email, phone..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10 bg-card h-10"
+                />
               </div>
-            ) : (
-              filtered.map(lead => (
-                <div
-                  key={lead.id}
-                  onClick={() => selectLead(lead)}
-                  className={`glass-card rounded-xl p-4 cursor-pointer transition-all hover:border-primary/50 ${
-                    selectedLead?.id === lead.id ? "border-primary" : ""
-                  }`}
+              <div className="relative">
+                <Filter className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
+                <select
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value as LeadStatus | "all")}
+                  className="h-10 rounded-lg border border-border bg-card pl-10 pr-8 text-sm text-foreground appearance-none"
                 >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-display font-bold truncate">{lead.name}</h3>
-                        <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${STATUS_COLORS[lead.status]}`}>
-                          {STATUS_LABELS[lead.status]}
-                        </span>
-                      </div>
-                      <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground">
-                        <span>{lead.email}</span>
-                        <span>{lead.phone}</span>
-                        {lead.city && <span>📍 {lead.city}</span>}
-                        {lead.event_type && <span>🎯 {lead.event_type}</span>}
-                        {lead.event_date && <span>📅 {format(new Date(lead.event_date), "MMM d, yyyy")}</span>}
+                  <option value="all">All Status</option>
+                  {Object.entries(STATUS_LABELS).map(([k, v]) => (
+                    <option key={k} value={k}>{v}</option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-2 top-3 w-4 h-4 text-muted-foreground pointer-events-none" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2 space-y-3">
+                {filtered.length === 0 ? (
+                  <div className="glass-card rounded-xl p-10 text-center">
+                    <Users className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
+                    <p className="text-muted-foreground">No leads found</p>
+                  </div>
+                ) : (
+                  filtered.map(lead => (
+                    <div
+                      key={lead.id}
+                      onClick={() => selectLead(lead)}
+                      className={`glass-card rounded-xl p-4 cursor-pointer transition-all hover:border-primary/50 ${
+                        selectedLead?.id === lead.id ? "border-primary" : ""
+                      }`}
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h3 className="font-display font-bold truncate">{lead.name}</h3>
+                            <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${STATUS_COLORS[lead.status]}`}>
+                              {STATUS_LABELS[lead.status]}
+                            </span>
+                          </div>
+                          <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground">
+                            <span>{lead.email}</span>
+                            <span>{lead.phone}</span>
+                            {lead.city && <span>📍 {lead.city}</span>}
+                            {lead.event_type && <span>🎯 {lead.event_type}</span>}
+                            {lead.event_date && <span>📅 {format(new Date(lead.event_date), "MMM d, yyyy")}</span>}
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-muted-foreground whitespace-nowrap">
+                            {format(new Date(lead.created_at), "MMM d")}
+                          </span>
+                          <button
+                            onClick={(e) => { e.stopPropagation(); deleteLead(lead.id); }}
+                            className="p-1 hover:bg-destructive/20 rounded transition-colors"
+                          >
+                            <Trash2 className="w-4 h-4 text-destructive" />
+                          </button>
+                        </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-muted-foreground whitespace-nowrap">
-                        {format(new Date(lead.created_at), "MMM d")}
+                  ))
+                )}
+              </div>
+
+              {/* Lead detail panel */}
+              <div className="space-y-4">
+                {selectedLead ? (
+                  <>
+                    <div className="glass-card rounded-xl p-6">
+                      <h3 className="font-display font-bold text-xl mb-4">{selectedLead.name}</h3>
+                      <div className="space-y-3 text-sm">
+                        <div><span className="text-muted-foreground">Email:</span> <span>{selectedLead.email}</span></div>
+                        <div><span className="text-muted-foreground">Phone:</span> <span>{selectedLead.phone}</span></div>
+                        {selectedLead.city && <div><span className="text-muted-foreground">City:</span> <span>{selectedLead.city}</span></div>}
+                        {selectedLead.event_type && <div><span className="text-muted-foreground">Event:</span> <span>{selectedLead.event_type}</span></div>}
+                        {selectedLead.event_date && <div><span className="text-muted-foreground">Date:</span> <span>{format(new Date(selectedLead.event_date), "MMM d, yyyy")}</span></div>}
+                        {selectedLead.participants && <div><span className="text-muted-foreground">Participants:</span> <span>{selectedLead.participants}</span></div>}
+                        {selectedLead.message && <div><span className="text-muted-foreground">Message:</span> <p className="mt-1">{selectedLead.message}</p></div>}
+                      </div>
+                      <div className="mt-4 pt-4 border-t border-border">
+                        <p className="text-xs text-muted-foreground mb-2">Update Status</p>
+                        <div className="flex flex-wrap gap-2">
+                          {(Object.keys(STATUS_LABELS) as LeadStatus[]).map(status => (
+                            <button
+                              key={status}
+                              onClick={() => updateStatus(selectedLead.id, status)}
+                              className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${
+                                selectedLead.status === status
+                                  ? STATUS_COLORS[status]
+                                  : "bg-secondary text-muted-foreground hover:bg-secondary/80"
+                              }`}
+                            >
+                              {STATUS_LABELS[status]}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Notes */}
+                    <div className="glass-card rounded-xl p-6">
+                      <h4 className="font-display font-bold mb-3 flex items-center gap-2">
+                        <MessageSquare className="w-4 h-4" /> Notes
+                      </h4>
+                      <div className="space-y-3 mb-4 max-h-60 overflow-y-auto">
+                        {(notes[selectedLead.id] || []).map(note => (
+                          <div key={note.id} className="bg-secondary/50 rounded-lg p-3">
+                            <p className="text-sm">{note.note}</p>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              {format(new Date(note.created_at), "MMM d, h:mm a")}
+                            </p>
+                          </div>
+                        ))}
+                        {(notes[selectedLead.id] || []).length === 0 && (
+                          <p className="text-sm text-muted-foreground">No notes yet</p>
+                        )}
+                      </div>
+                      <div className="flex gap-2">
+                        <Textarea
+                          placeholder="Add a note..."
+                          value={newNote}
+                          onChange={(e) => setNewNote(e.target.value)}
+                          className="bg-background/50 min-h-[60px] text-sm"
+                        />
+                      </div>
+                      <Button variant="hero" size="sm" className="mt-2 w-full" onClick={addNote}>
+                        Add Note
+                      </Button>
+                    </div>
+                  </>
+                ) : (
+                  <div className="glass-card rounded-xl p-10 text-center">
+                    <MessageSquare className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
+                    <p className="text-muted-foreground">Select a lead to view details</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* CALENDAR TAB */}
+        {activeTab === "calendar" && (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-1">
+              <div className="glass-card rounded-xl p-4">
+                <Calendar
+                  mode="single"
+                  selected={selectedCalDate}
+                  onSelect={setSelectedCalDate}
+                  month={calendarDate}
+                  onMonthChange={setCalendarDate}
+                  className="pointer-events-auto"
+                  modifiers={{
+                    hasEvent: eventDates,
+                  }}
+                  modifiersClassNames={{
+                    hasEvent: "bg-primary/20 font-bold text-primary",
+                  }}
+                />
+              </div>
+            </div>
+            <div className="lg:col-span-2 space-y-4">
+              <h3 className="font-display font-bold text-lg">
+                {selectedCalDate ? format(selectedCalDate, "EEEE, MMMM d, yyyy") : "Select a date"}
+              </h3>
+
+              {/* Events on selected date */}
+              {selectedDateEvents.events.length > 0 && (
+                <div className="space-y-2">
+                  <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Events</p>
+                  {selectedDateEvents.events.map(lead => (
+                    <div key={lead.id} className="glass-card rounded-xl p-4 flex items-center justify-between">
+                      <div>
+                        <p className="font-display font-bold">{lead.name}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {lead.event_type} • {lead.city || "No city"} • {lead.participants || "?"} participants
+                        </p>
+                      </div>
+                      <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${STATUS_COLORS[lead.status]}`}>
+                        {STATUS_LABELS[lead.status]}
                       </span>
-                      <button
-                        onClick={(e) => { e.stopPropagation(); deleteLead(lead.id); }}
-                        className="p-1 hover:bg-destructive/20 rounded transition-colors"
-                      >
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Reminders on selected date */}
+              {selectedDateEvents.dayReminders.length > 0 && (
+                <div className="space-y-2">
+                  <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Follow-ups</p>
+                  {selectedDateEvents.dayReminders.map(r => (
+                    <div key={r.id} className={`glass-card rounded-xl p-4 flex items-center gap-3 ${r.completed ? "opacity-50" : ""}`}>
+                      <button onClick={() => toggleReminderComplete(r.id, r.completed)}>
+                        <CheckCircle className={`w-5 h-5 ${r.completed ? "text-ludo-green" : "text-muted-foreground"}`} />
+                      </button>
+                      <div className="flex-1">
+                        <p className={`font-display font-bold ${r.completed ? "line-through" : ""}`}>{r.title}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {leadNameMap[r.lead_id] || "Unknown lead"}
+                          {r.description && ` • ${r.description}`}
+                        </p>
+                      </div>
+                      <button onClick={() => deleteReminder(r.id)} className="p-1 hover:bg-destructive/20 rounded">
                         <Trash2 className="w-4 h-4 text-destructive" />
                       </button>
                     </div>
-                  </div>
+                  ))}
                 </div>
-              ))
-            )}
+              )}
+
+              {selectedDateEvents.events.length === 0 && selectedDateEvents.dayReminders.length === 0 && (
+                <div className="glass-card rounded-xl p-10 text-center">
+                  <CalendarIcon className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
+                  <p className="text-muted-foreground">No events or follow-ups on this date</p>
+                </div>
+              )}
+            </div>
           </div>
+        )}
 
-          {/* Lead detail panel */}
+        {/* REMINDERS TAB */}
+        {activeTab === "reminders" && (
           <div className="space-y-4">
-            {selectedLead ? (
-              <>
-                <div className="glass-card rounded-xl p-6">
-                  <h3 className="font-display font-bold text-xl mb-4">{selectedLead.name}</h3>
-                  <div className="space-y-3 text-sm">
-                    <div><span className="text-muted-foreground">Email:</span> <span>{selectedLead.email}</span></div>
-                    <div><span className="text-muted-foreground">Phone:</span> <span>{selectedLead.phone}</span></div>
-                    {selectedLead.city && <div><span className="text-muted-foreground">City:</span> <span>{selectedLead.city}</span></div>}
-                    {selectedLead.event_type && <div><span className="text-muted-foreground">Event:</span> <span>{selectedLead.event_type}</span></div>}
-                    {selectedLead.event_date && <div><span className="text-muted-foreground">Date:</span> <span>{format(new Date(selectedLead.event_date), "MMM d, yyyy")}</span></div>}
-                    {selectedLead.participants && <div><span className="text-muted-foreground">Participants:</span> <span>{selectedLead.participants}</span></div>}
-                    {selectedLead.message && <div><span className="text-muted-foreground">Message:</span> <p className="mt-1">{selectedLead.message}</p></div>}
-                  </div>
+            <div className="flex justify-between items-center">
+              <h3 className="font-display font-bold text-lg">Follow-up Reminders</h3>
+              <Button variant="hero" size="sm" onClick={() => setShowReminderForm(true)}>
+                <Plus className="w-4 h-4 mr-1" /> Add Reminder
+              </Button>
+            </div>
 
-                  {/* Status changer */}
-                  <div className="mt-4 pt-4 border-t border-border">
-                    <p className="text-xs text-muted-foreground mb-2">Update Status</p>
-                    <div className="flex flex-wrap gap-2">
-                      {(Object.keys(STATUS_LABELS) as LeadStatus[]).map(status => (
-                        <button
-                          key={status}
-                          onClick={() => updateStatus(selectedLead.id, status)}
-                          className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${
-                            selectedLead.status === status
-                              ? STATUS_COLORS[status]
-                              : "bg-secondary text-muted-foreground hover:bg-secondary/80"
-                          }`}
-                        >
-                          {STATUS_LABELS[status]}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+            {/* Add reminder form */}
+            {showReminderForm && (
+              <div className="glass-card rounded-xl p-6 space-y-4">
+                <div className="flex justify-between items-center">
+                  <h4 className="font-display font-bold">New Follow-up</h4>
+                  <button onClick={() => setShowReminderForm(false)}>
+                    <X className="w-5 h-5 text-muted-foreground" />
+                  </button>
                 </div>
-
-                {/* Notes */}
-                <div className="glass-card rounded-xl p-6">
-                  <h4 className="font-display font-bold mb-3 flex items-center gap-2">
-                    <MessageSquare className="w-4 h-4" /> Notes
-                  </h4>
-                  <div className="space-y-3 mb-4 max-h-60 overflow-y-auto">
-                    {(notes[selectedLead.id] || []).map(note => (
-                      <div key={note.id} className="bg-secondary/50 rounded-lg p-3">
-                        <p className="text-sm">{note.note}</p>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {format(new Date(note.created_at), "MMM d, h:mm a")}
-                        </p>
-                      </div>
-                    ))}
-                    {(notes[selectedLead.id] || []).length === 0 && (
-                      <p className="text-sm text-muted-foreground">No notes yet</p>
-                    )}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Lead *</label>
+                    <select
+                      value={reminderLeadId}
+                      onChange={(e) => setReminderLeadId(e.target.value)}
+                      className="w-full h-10 rounded-lg border border-border bg-card px-3 text-sm text-foreground"
+                    >
+                      <option value="">Select a lead</option>
+                      {leads.map(l => (
+                        <option key={l.id} value={l.id}>{l.name} — {l.event_type || "No event"}</option>
+                      ))}
+                    </select>
                   </div>
-                  <div className="flex gap-2">
-                    <Textarea
-                      placeholder="Add a note..."
-                      value={newNote}
-                      onChange={(e) => setNewNote(e.target.value)}
-                      className="bg-background/50 min-h-[60px] text-sm"
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Date *</label>
+                    <Input
+                      type="datetime-local"
+                      value={reminderDate}
+                      onChange={(e) => setReminderDate(e.target.value)}
+                      className="bg-card"
                     />
                   </div>
-                  <Button variant="hero" size="sm" className="mt-2 w-full" onClick={addNote}>
-                    Add Note
-                  </Button>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Title *</label>
+                    <Input
+                      value={reminderTitle}
+                      onChange={(e) => setReminderTitle(e.target.value)}
+                      placeholder="e.g. Follow up call"
+                      className="bg-card"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Description</label>
+                    <Input
+                      value={reminderDesc}
+                      onChange={(e) => setReminderDesc(e.target.value)}
+                      placeholder="Optional details"
+                      className="bg-card"
+                    />
+                  </div>
                 </div>
-              </>
-            ) : (
+                <Button variant="hero" size="sm" onClick={addReminder}>Save Reminder</Button>
+              </div>
+            )}
+
+            {/* Pending reminders */}
+            {reminders.filter(r => !r.completed).length > 0 && (
+              <div className="space-y-2">
+                <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Pending</p>
+                {reminders.filter(r => !r.completed).map(r => (
+                  <div key={r.id} className={`glass-card rounded-xl p-4 flex items-center gap-3 ${
+                    !r.completed && new Date(r.reminder_date) < new Date() ? "border-destructive/50" : ""
+                  }`}>
+                    <button onClick={() => toggleReminderComplete(r.id, r.completed)}>
+                      <CheckCircle className="w-5 h-5 text-muted-foreground" />
+                    </button>
+                    <div className="flex-1">
+                      <p className="font-display font-bold">{r.title}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {leadNameMap[r.lead_id] || "Unknown"} • {format(new Date(r.reminder_date), "MMM d, h:mm a")}
+                        {r.description && ` • ${r.description}`}
+                      </p>
+                    </div>
+                    {!r.completed && new Date(r.reminder_date) < new Date() && (
+                      <span className="text-xs font-bold text-destructive">Overdue</span>
+                    )}
+                    <button onClick={() => deleteReminder(r.id)} className="p-1 hover:bg-destructive/20 rounded">
+                      <Trash2 className="w-4 h-4 text-destructive" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Completed reminders */}
+            {reminders.filter(r => r.completed).length > 0 && (
+              <div className="space-y-2">
+                <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Completed</p>
+                {reminders.filter(r => r.completed).map(r => (
+                  <div key={r.id} className="glass-card rounded-xl p-4 flex items-center gap-3 opacity-50">
+                    <button onClick={() => toggleReminderComplete(r.id, r.completed)}>
+                      <CheckCircle className="w-5 h-5 text-ludo-green" />
+                    </button>
+                    <div className="flex-1">
+                      <p className="font-display font-bold line-through">{r.title}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {leadNameMap[r.lead_id] || "Unknown"} • {format(new Date(r.reminder_date), "MMM d, h:mm a")}
+                      </p>
+                    </div>
+                    <button onClick={() => deleteReminder(r.id)} className="p-1 hover:bg-destructive/20 rounded">
+                      <Trash2 className="w-4 h-4 text-destructive" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {reminders.length === 0 && (
               <div className="glass-card rounded-xl p-10 text-center">
-                <MessageSquare className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
-                <p className="text-muted-foreground">Select a lead to view details</p>
+                <Bell className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
+                <p className="text-muted-foreground">No follow-up reminders yet</p>
               </div>
             )}
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

@@ -16,6 +16,15 @@ import {
   type GameState,
   type TeamColor,
 } from "@/game/gameLogic";
+import {
+  playDiceRollTick,
+  playDiceResult,
+  playPieceMove,
+  playPieceOut,
+  playVictory,
+  playNoMove,
+  playTurnChange,
+} from "@/game/sounds";
 
 const ENVIRONMENTS = [
   { id: "park", label: "🌳 Park", desc: "Ludo on grass" },

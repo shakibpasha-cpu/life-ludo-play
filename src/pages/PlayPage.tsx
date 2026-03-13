@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import GameCanvas from "@/game/GameCanvas";
+import Board2D from "@/game/Board2D";
 import {
   createInitialState,
   rollDice,
@@ -194,9 +194,8 @@ const PlayPage = () => {
     <div className="h-screen bg-background flex flex-col lg:flex-row overflow-hidden">
       {/* 3D Game View */}
       <div className="flex-1 relative">
-        <GameCanvas
+        <Board2D
           gameState={gameState}
-          environment={environment}
           onRollDice={handleRollDice}
           onMovePiece={handleMovePiece}
         />

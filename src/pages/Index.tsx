@@ -3,6 +3,7 @@ import HeroSection from "@/components/HeroSection";
 import HowItWorks from "@/components/HowItWorks";
 import EventTypes from "@/components/EventTypes";
 import Gallery from "@/components/Gallery";
+import FunZone from "@/components/FunZone";
 import LudoDemo from "@/components/LudoDemo";
 import Testimonials from "@/components/Testimonials";
 import BookingForm from "@/components/BookingForm";

@@ -21,7 +21,7 @@ const ContactSection = () => {
             { icon: Phone, label: "Call Us", value: "+91 XXXXX XXXXX", href: "tel:+91XXXXXXXXXX" },
             { icon: MessageCircle, label: "WhatsApp", value: "Chat Now", href: "https://wa.me/91XXXXXXXXXX?text=Hi!%20I'm%20interested%20in%20Human%20Size%20Ludo" },
             { icon: Mail, label: "Email", value: "hello@humansizeludo.com", href: "mailto:hello@humansizeludo.com" },
-            { icon: MapPin, label: "Location", value: "India", href: "#" },
+            { icon: MapPin, label: "Location", value: "Pakistan", href: "#" },
           ].map((item, i) => (
             <motion.a
               key={item.label}

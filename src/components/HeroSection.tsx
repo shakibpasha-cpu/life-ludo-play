@@ -15,13 +15,18 @@ const HeroSection = () => {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background image */}
+      {/* Background video */}
       <div className="absolute inset-0">
-        <img
-          src={heroImage}
-          alt="Human Size Ludo Experience - Giant Ludo board with people playing"
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster={heroImage}
           className="w-full h-full object-cover"
-        />
+        >
+          <source src="/videos/hero-ludo.mp4" type="video/mp4" />
+        </video>
         <div className="absolute inset-0 bg-background/70 backdrop-blur-sm" />
         <div className="absolute inset-0" style={{ background: "var(--gradient-hero)" }} />
       </div>

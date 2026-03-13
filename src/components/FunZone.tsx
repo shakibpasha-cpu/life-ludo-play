@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Play, X } from "lucide-react";
+import { Play, X, ChevronLeft, ChevronRight } from "lucide-react";
 
 const videos = [
   { id: 1, src: "/videos/fun-1.mp4", title: "Life-Size Ludo Fun" },

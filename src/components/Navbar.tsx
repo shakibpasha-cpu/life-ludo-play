@@ -5,6 +5,7 @@ import { Menu, X, Dices, Sun, Moon } from "lucide-react";
 const links = [
   { label: "How It Works", href: "#how-it-works" },
   { label: "Events", href: "#events" },
+  { label: "Shop", href: "#shop" },
   { label: "Gallery", href: "#gallery" },
   { label: "Demo", href: "#demo" },
   { label: "Book Now", href: "#booking" },

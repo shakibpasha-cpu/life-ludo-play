@@ -4,6 +4,7 @@ import HowItWorks from "@/components/HowItWorks";
 import EventTypes from "@/components/EventTypes";
 import Gallery from "@/components/Gallery";
 import FunZone from "@/components/FunZone";
+import ShopSection from "@/components/ShopSection";
 import LudoDemo from "@/components/LudoDemo";
 import Testimonials from "@/components/Testimonials";
 import BookingForm from "@/components/BookingForm";
@@ -19,6 +20,7 @@ const Index = () => {
         <HeroSection />
         <HowItWorks />
         <EventTypes />
+        <ShopSection />
         <Gallery />
         <FunZone />
         <LudoDemo />

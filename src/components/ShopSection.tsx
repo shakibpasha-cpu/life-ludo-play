@@ -35,10 +35,10 @@ const ShopSection = () => {
           className="text-center mb-14"
         >
           <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">
-            🛒 Buy Your <span className="text-gradient-ludo">Ludo Board</span>
+            🛒 Get Your <span className="text-gradient-ludo">Ludo Game Kit</span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Own the ultimate life-size Ludo experience — delivered to your doorstep anywhere in Pakistan or worldwide!
+            Own the ultimate life-size Ludo game experience — delivered to your doorstep anywhere in Pakistan or worldwide!
           </p>
         </motion.div>
 

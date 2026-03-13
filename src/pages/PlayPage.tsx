@@ -194,9 +194,8 @@ const PlayPage = () => {
     <div className="h-screen bg-background flex flex-col lg:flex-row overflow-hidden">
       {/* 3D Game View */}
       <div className="flex-1 relative">
-        <GameCanvas
+        <Board2D
           gameState={gameState}
-          environment={environment}
           onRollDice={handleRollDice}
           onMovePiece={handleMovePiece}
         />

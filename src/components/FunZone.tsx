@@ -83,7 +83,24 @@ const FunZone = () => {
           >
             <X className="w-5 h-5 text-foreground" />
           </button>
+          {activeVideo > 0 && (
+            <button
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-secondary/80 flex items-center justify-center hover:bg-secondary transition-colors z-10"
+              onClick={(e) => { e.stopPropagation(); setActiveVideo(activeVideo - 1); }}
+            >
+              <ChevronLeft className="w-6 h-6 text-foreground" />
+            </button>
+          )}
+          {activeVideo < videos.length - 1 && (
+            <button
+              className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-secondary/80 flex items-center justify-center hover:bg-secondary transition-colors z-10"
+              onClick={(e) => { e.stopPropagation(); setActiveVideo(activeVideo + 1); }}
+            >
+              <ChevronRight className="w-6 h-6 text-foreground" />
+            </button>
+          )}
           <motion.video
+            key={activeVideo}
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             src={videos[activeVideo].src}

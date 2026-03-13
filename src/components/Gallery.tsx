@@ -133,12 +133,36 @@ const Gallery = () => {
           className="fixed inset-0 z-50 bg-background/90 backdrop-blur-md flex items-center justify-center p-4"
           onClick={() => setLightbox(null)}
         >
+          <button
+            className="absolute top-6 right-6 w-10 h-10 rounded-full bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors z-10"
+            onClick={() => setLightbox(null)}
+          >
+            <X className="w-5 h-5 text-foreground" />
+          </button>
+          {lightbox > 0 && (
+            <button
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-secondary/80 flex items-center justify-center hover:bg-secondary transition-colors z-10"
+              onClick={(e) => { e.stopPropagation(); setLightbox(lightbox - 1); }}
+            >
+              <ChevronLeft className="w-6 h-6 text-foreground" />
+            </button>
+          )}
+          {lightbox < filtered.length - 1 && (
+            <button
+              className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-secondary/80 flex items-center justify-center hover:bg-secondary transition-colors z-10"
+              onClick={(e) => { e.stopPropagation(); setLightbox(lightbox + 1); }}
+            >
+              <ChevronRight className="w-6 h-6 text-foreground" />
+            </button>
+          )}
           <motion.img
+            key={lightbox}
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             src={filtered[lightbox]?.image_url}
             alt={filtered[lightbox]?.title}
             className="max-w-full max-h-[80vh] rounded-2xl object-contain"
+            onClick={(e) => e.stopPropagation()}
           />
         </div>
       )}

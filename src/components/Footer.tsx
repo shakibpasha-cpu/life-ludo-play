@@ -12,7 +12,7 @@ const Footer = () => {
               <span>Human Size Ludo</span>
             </div>
             <p className="text-muted-foreground text-sm leading-relaxed">
-              India's most exciting life-size Ludo game experience for families, corporates, and celebrations.
+              Pakistan's most exciting life-size Ludo game experience for families, corporates, and celebrations.
             </p>
           </div>
           <div>

@@ -55,7 +55,7 @@ const HeroSection = () => {
           transition={{ duration: 0.8 }}
         >
           <span className="inline-block px-4 py-2 rounded-full bg-secondary border border-border text-sm font-body text-muted-foreground mb-6">
-            🎲 India's Most Exciting Life-Size Game
+            🎲 Pakistan's Most Exciting Life-Size Game
           </span>
         </motion.div>
 

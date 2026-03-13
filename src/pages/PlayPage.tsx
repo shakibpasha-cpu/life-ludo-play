@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import GameCanvas from "@/game/GameCanvas";
+import Board2D from "@/game/Board2D";
 import {
   createInitialState,
   rollDice,

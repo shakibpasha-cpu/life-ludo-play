@@ -1,7 +1,16 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
-import heroImage from "@/assets/hero-ludo.jpg";
+import gallery1 from "@/assets/gallery/gallery-1.jpeg";
+import gallery2 from "@/assets/gallery/gallery-2.jpeg";
+import gallery3 from "@/assets/gallery/gallery-3.jpeg";
+import gallery4 from "@/assets/gallery/gallery-4.jpeg";
+import gallery5 from "@/assets/gallery/gallery-5.jpeg";
+import gallery6 from "@/assets/gallery/gallery-6.jpeg";
+import gallery7 from "@/assets/gallery/gallery-7.jpeg";
+import gallery8 from "@/assets/gallery/gallery-8.jpeg";
+import gallery9 from "@/assets/gallery/gallery-9.jpeg";
+import gallery10 from "@/assets/gallery/gallery-10.jpeg";
 
 interface GalleryItem {
   id: string;
@@ -11,13 +20,17 @@ interface GalleryItem {
 }
 
 const fallbackItems: GalleryItem[] = [
-  { id: "1", src: heroImage, category: "Family Events", title: "Family Fun Day" } as any,
-  { id: "2", src: heroImage, category: "Corporate Events", title: "Team Building Session" } as any,
-  { id: "3", src: heroImage, category: "School Events", title: "School Sports Day" } as any,
-  { id: "4", src: heroImage, category: "Festivals", title: "Festival Entertainment" } as any,
-  { id: "5", src: heroImage, category: "Family Events", title: "Weekend Gaming" } as any,
-  { id: "6", src: heroImage, category: "Corporate Events", title: "Office Party" } as any,
-].map(item => ({ ...item, image_url: item.src || heroImage }));
+  { id: "1", image_url: gallery1, category: "Family Events", title: "Indoor Ludo Setup" },
+  { id: "2", image_url: gallery2, category: "Family Events", title: "Outdoor Ludo Fun" },
+  { id: "3", image_url: gallery3, category: "Family Events", title: "Street Ludo Game" },
+  { id: "4", image_url: gallery4, category: "Family Events", title: "Night Ludo Party" },
+  { id: "5", image_url: gallery5, category: "Family Events", title: "Goti Pe Goti Moment" },
+  { id: "6", image_url: gallery6, category: "Deliveries", title: "Happy Customer Delivery" },
+  { id: "7", image_url: gallery7, category: "Deliveries", title: "Customer Shoutout" },
+  { id: "8", image_url: gallery8, category: "Deliveries", title: "Ludo Vibes Parcel" },
+  { id: "9", image_url: gallery9, category: "Family Events", title: "Snakes & Ladders Fun" },
+  { id: "10", image_url: gallery10, category: "Deliveries", title: "Customer Love" },
+];
 
 const Gallery = () => {
   const [items, setItems] = useState<GalleryItem[]>(fallbackItems);

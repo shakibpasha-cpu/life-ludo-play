@@ -27,7 +27,7 @@ const HeroSection = () => {
         >
           <source src="/videos/hero-ludo.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-background/70 backdrop-blur-sm" />
+        <div className="absolute inset-0 bg-background/40" />
         <div className="absolute inset-0" style={{ background: "var(--gradient-hero)" }} />
       </div>
 

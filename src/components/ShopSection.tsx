@@ -21,7 +21,7 @@ const ShopSection = () => {
 
   const handleOrderNow = () => {
     const sizeLabel = sizes.find(s => s.id === selectedSize)?.label || "20 × 20 ft";
-    const message = `Hi! I'd like to order a Human Size Ludo Board.\n\n📏 Size: ${sizeLabel}\n${customNote ? `📝 Note: ${customNote}\n` : ""}\nPlease share pricing and delivery details.`;
+    const message = `Hi! I'd like to order a Life-Size Ludo Game Kit.\n\n📏 Size: ${sizeLabel}\n${customNote ? `📝 Note: ${customNote}\n` : ""}\nPlease share pricing and delivery details.`;
     window.open(`https://wa.me/91XXXXXXXXXX?text=${encodeURIComponent(message)}`, "_blank");
   };
 
@@ -35,10 +35,10 @@ const ShopSection = () => {
           className="text-center mb-14"
         >
           <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">
-            🛒 Buy Your <span className="text-gradient-ludo">Ludo Board</span>
+            🛒 Get Your <span className="text-gradient-ludo">Ludo Game Kit</span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Own the ultimate life-size Ludo experience — delivered to your doorstep anywhere in Pakistan or worldwide!
+            Own the ultimate life-size Ludo game experience — delivered to your doorstep anywhere in Pakistan or worldwide!
           </p>
         </motion.div>
 

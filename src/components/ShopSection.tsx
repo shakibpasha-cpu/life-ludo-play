@@ -21,7 +21,7 @@ const ShopSection = () => {
 
   const handleOrderNow = () => {
     const sizeLabel = sizes.find(s => s.id === selectedSize)?.label || "20 × 20 ft";
-    const message = `Hi! I'd like to order a Human Size Ludo Board.\n\n📏 Size: ${sizeLabel}\n${customNote ? `📝 Note: ${customNote}\n` : ""}\nPlease share pricing and delivery details.`;
+    const message = `Hi! I'd like to order a Life-Size Ludo Game Kit.\n\n📏 Size: ${sizeLabel}\n${customNote ? `📝 Note: ${customNote}\n` : ""}\nPlease share pricing and delivery details.`;
     window.open(`https://wa.me/91XXXXXXXXXX?text=${encodeURIComponent(message)}`, "_blank");
   };
 

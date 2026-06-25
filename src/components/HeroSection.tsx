@@ -16,14 +16,14 @@ const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-32 pb-16">
       {/* Background video */}
-      <div className="absolute inset-0">
+      <div className="absolute top-16 bottom-0 left-0 right-0">
         <video
           autoPlay
           muted
           loop
           playsInline
           poster={heroImage}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover object-top"
         >
           <source src="/videos/hero-ludo.mp4" type="video/mp4" />
         </video>

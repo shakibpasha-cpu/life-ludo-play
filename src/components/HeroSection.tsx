@@ -23,7 +23,7 @@ const HeroSection = () => {
           loop
           playsInline
           poster={heroImage}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover object-[center_40%]"
         >
           <source src="/videos/hero-ludo.mp4" type="video/mp4" />
         </video>

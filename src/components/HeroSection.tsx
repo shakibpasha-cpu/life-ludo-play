@@ -35,7 +35,7 @@ const HeroSection = () => {
       <motion.img
         src={diceImage}
         alt="Colorful dice"
-        className="absolute top-20 right-10 w-20 h-20 md:w-32 md:h-32 opacity-80"
+        className="absolute top-40 right-10 w-20 h-20 md:w-32 md:h-32 opacity-80"
         animate={{ y: [0, -20, 0], rotate: [0, 10, 0] }}
         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
       />

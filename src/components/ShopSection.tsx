@@ -26,7 +26,7 @@ const ShopSection = () => {
   };
 
   return (
-    <section className="py-24 px-4 bg-secondary/20" id="shop">
+    <section className="py-16 md:py-24 px-4 bg-secondary/20" id="shop">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -37,12 +37,12 @@ const ShopSection = () => {
           <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">
             🛒 Get Your <span className="text-gradient-ludo">Ludo Game Kit</span>
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto">
             Own the ultimate life-size Ludo game experience — delivered to your doorstep anywhere in Pakistan or worldwide!
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-10 items-start">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-10 items-start">
           {/* Product Image */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -57,7 +57,7 @@ const ShopSection = () => {
                 className="w-full h-auto object-cover"
               />
             </div>
-            <div className="absolute -bottom-4 -right-4 bg-primary text-primary-foreground px-5 py-2 rounded-xl font-display font-bold text-sm shadow-lg">
+            <div className="absolute -bottom-3 right-2 sm:-bottom-4 sm:-right-4 bg-primary text-primary-foreground px-4 sm:px-5 py-2 rounded-xl font-display font-bold text-xs sm:text-sm shadow-lg">
               🎲 Life-Size Board
             </div>
           </motion.div>
@@ -70,18 +70,18 @@ const ShopSection = () => {
             className="space-y-6"
           >
             {/* Features Grid */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 gap-3">
               {features.map((f, i) => (
                 <div
                   key={i}
-                  className="flex items-center gap-3 p-3 rounded-xl bg-background border border-border"
+                  className="flex items-center gap-3 p-3 rounded-xl bg-background border border-border min-w-0"
                 >
                   <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
                     <f.icon className="w-5 h-5 text-primary" />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-xs text-muted-foreground">{f.label}</p>
-                    <p className="text-sm font-bold text-foreground">{f.value}</p>
+                    <p className="text-sm font-bold text-foreground break-words">{f.value}</p>
                   </div>
                 </div>
               ))}
@@ -92,7 +92,7 @@ const ShopSection = () => {
               <label className="block text-sm font-display font-bold text-foreground mb-3">
                 Select Size
               </label>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 gap-3">
                 {sizes.map((size) => (
                   <button
                     key={size.id}

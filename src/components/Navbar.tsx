@@ -38,9 +38,9 @@ const Navbar = () => {
         </a>
 
         {/* Desktop */}
-        <div className="hidden md:flex items-center gap-6">
+        <div className="hidden lg:flex items-center gap-5 xl:gap-6">
           {links.map(l => (
-            <a key={l.label} href={l.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors font-body">
+            <a key={l.label} href={l.href} className="text-sm whitespace-nowrap text-muted-foreground hover:text-foreground transition-colors font-body">
               {l.label}
             </a>
           ))}
@@ -54,7 +54,7 @@ const Navbar = () => {
         </div>
 
         {/* Mobile controls */}
-        <div className="flex items-center gap-2 md:hidden">
+        <div className="flex items-center gap-2 lg:hidden">
           <button
             onClick={() => setDark(!dark)}
             className="p-2 rounded-full bg-secondary"
@@ -73,7 +73,7 @@ const Navbar = () => {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="md:hidden bg-background border-b border-border px-4 pb-4"
+          className="lg:hidden bg-background border-b border-border px-4 pb-4 max-h-[70vh] overflow-y-auto"
         >
           {links.map(l => (
             <a key={l.label} href={l.href} onClick={() => setOpen(false)} className="block py-3 text-muted-foreground hover:text-foreground transition-colors font-body">

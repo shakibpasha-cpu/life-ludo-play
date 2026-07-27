@@ -34,7 +34,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        <div className="border-t border-border pt-6 flex items-center justify-between text-muted-foreground text-sm">
+        <div className="border-t border-border pt-6 flex flex-col sm:flex-row items-center gap-3 sm:gap-4 justify-between text-muted-foreground text-xs sm:text-sm text-center sm:text-left">
           <span>© {new Date().getFullYear()} Human Size Ludo Experience. All rights reserved.</span>
           <Link to="/admin" className="flex items-center gap-1.5 hover:text-foreground transition-colors text-xs">
             <Lock className="w-3 h-3" /> Admin

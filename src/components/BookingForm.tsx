@@ -50,7 +50,7 @@ const BookingForm = () => {
   };
 
   return (
-    <section className="py-24 px-4 bg-secondary/30" id="booking">
+    <section className="py-16 md:py-24 px-4 bg-secondary/30" id="booking">
       <div className="max-w-3xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -61,7 +61,7 @@ const BookingForm = () => {
           <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">
             Book Your <span className="text-gradient-ludo">Experience</span>
           </h2>
-          <p className="text-muted-foreground text-lg">Fill in the details and we'll create magic for your event</p>
+          <p className="text-muted-foreground text-base md:text-lg">Fill in the details and we'll create magic for your event</p>
         </motion.div>
 
         <motion.form
@@ -69,9 +69,9 @@ const BookingForm = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           onSubmit={handleSubmit}
-          className="glass-card rounded-2xl p-8 space-y-5"
+          className="glass-card rounded-2xl p-5 sm:p-8 space-y-5"
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
             <Input name="name" placeholder="Your Name *" value={form.name} onChange={handleChange} className="bg-background/50 border-border h-12" required />
             <Input name="phone" placeholder="Phone Number *" value={form.phone} onChange={handleChange} className="bg-background/50 border-border h-12" required />
             <Input name="email" type="email" placeholder="Email *" value={form.email} onChange={handleChange} className="bg-background/50 border-border h-12" required />
@@ -80,7 +80,7 @@ const BookingForm = () => {
               name="eventType"
               value={form.eventType}
               onChange={handleChange}
-              className="h-12 rounded-lg border border-border bg-background/50 px-3 text-sm text-foreground"
+              className="h-12 w-full rounded-lg border border-border bg-background/50 px-3 text-sm text-foreground"
             >
               <option value="">Select Event Type</option>
               {eventTypes.map(t => <option key={t} value={t}>{t}</option>)}

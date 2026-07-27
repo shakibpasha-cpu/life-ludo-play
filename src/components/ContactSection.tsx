@@ -3,7 +3,7 @@ import { Phone, Mail, MapPin, MessageCircle } from "lucide-react";
 
 const ContactSection = () => {
   return (
-    <section className="py-24 px-4" id="contact">
+    <section className="py-16 md:py-24 px-4" id="contact">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -16,7 +16,7 @@ const ContactSection = () => {
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {[
             { icon: Phone, label: "Call Us", value: "+91 XXXXX XXXXX", href: "tel:+91XXXXXXXXXX" },
             { icon: MessageCircle, label: "WhatsApp", value: "Chat Now", href: "https://wa.me/91XXXXXXXXXX?text=Hi!%20I'm%20interested%20in%20Human%20Size%20Ludo" },
@@ -32,7 +32,7 @@ const ContactSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="glass-card rounded-2xl p-6 text-center hover:border-primary/50 transition-all group"
+              className="glass-card rounded-2xl p-5 sm:p-6 text-center hover:border-primary/50 transition-all group break-words"
             >
               <item.icon className="w-8 h-8 mx-auto mb-3 text-primary group-hover:scale-110 transition-transform" />
               <p className="font-display font-bold mb-1">{item.label}</p>

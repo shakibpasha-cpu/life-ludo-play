@@ -18,7 +18,7 @@ const FunZone = () => {
   const [activeVideo, setActiveVideo] = useState<number | null>(null);
 
   return (
-    <section className="py-24 px-4 bg-secondary/30" id="fun-zone">
+    <section className="py-16 md:py-24 px-4 bg-secondary/30" id="fun-zone">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -29,12 +29,12 @@ const FunZone = () => {
           <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">
             🎬 Fun <span className="text-gradient-ludo">Zone</span>
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto">
             Watch the excitement unfold — real moments from our life-size game events!
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
           {videos.map((video, i) => (
             <motion.div
               key={video.id}
@@ -85,7 +85,7 @@ const FunZone = () => {
           </button>
           {activeVideo > 0 && (
             <button
-              className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-secondary/80 flex items-center justify-center hover:bg-secondary transition-colors z-10"
+              className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-secondary/80 flex items-center justify-center hover:bg-secondary transition-colors z-10"
               onClick={(e) => { e.stopPropagation(); setActiveVideo(activeVideo - 1); }}
             >
               <ChevronLeft className="w-6 h-6 text-foreground" />
@@ -93,7 +93,7 @@ const FunZone = () => {
           )}
           {activeVideo < videos.length - 1 && (
             <button
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-secondary/80 flex items-center justify-center hover:bg-secondary transition-colors z-10"
+              className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-secondary/80 flex items-center justify-center hover:bg-secondary transition-colors z-10"
               onClick={(e) => { e.stopPropagation(); setActiveVideo(activeVideo + 1); }}
             >
               <ChevronRight className="w-6 h-6 text-foreground" />

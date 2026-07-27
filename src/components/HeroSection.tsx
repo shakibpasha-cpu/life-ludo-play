@@ -14,7 +14,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-32 pb-16">
+    <section className="relative min-h-[100svh] flex flex-col items-center justify-center overflow-hidden pt-28 sm:pt-32 pb-20">
       {/* Background video */}
       <div className="absolute inset-0">
         <video
@@ -35,14 +35,14 @@ const HeroSection = () => {
       <motion.img
         src={diceImage}
         alt="Colorful dice"
-        className="absolute top-40 right-10 w-20 h-20 md:w-32 md:h-32 opacity-80"
+        className="absolute top-24 right-4 sm:top-40 sm:right-10 w-14 h-14 sm:w-20 sm:h-20 md:w-32 md:h-32 opacity-80 pointer-events-none"
         animate={{ y: [0, -20, 0], rotate: [0, 10, 0] }}
         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.img
         src={diceImage}
         alt="Colorful dice"
-        className="absolute bottom-32 left-10 w-16 h-16 md:w-24 md:h-24 opacity-60"
+        className="absolute bottom-24 left-4 sm:bottom-32 sm:left-10 w-12 h-12 sm:w-16 sm:h-16 md:w-24 md:h-24 opacity-60 pointer-events-none"
         animate={{ y: [0, -15, 0], rotate: [0, -15, 0] }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
       />
@@ -54,7 +54,7 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <span className="inline-block px-4 py-2 rounded-full bg-secondary border border-border text-sm font-body text-muted-foreground mb-6">
+          <span className="inline-block px-3 sm:px-4 py-2 rounded-full bg-secondary border border-border text-xs sm:text-sm font-body text-muted-foreground mb-6">
             🎲 Pakistan's Most Exciting Life-Size Game
           </span>
         </motion.div>
@@ -63,7 +63,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-4xl md:text-6xl lg:text-7xl font-display font-black leading-tight mb-6"
+          className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-display font-black leading-tight mb-5 sm:mb-6"
         >
           Step Into The Game –{" "}
           <span className="text-gradient-ludo">Become The Ludo Piece!</span>
@@ -73,7 +73,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-10"
+          className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-8 sm:mb-10"
         >
           Experience the world's most exciting life-size Ludo game for families,
           corporate events, and celebrations.
@@ -83,7 +83,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center"
+          className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-stretch sm:items-center"
         >
           <Button variant="hero" size="xl" onClick={scrollToBooking}>
             🎯 Book Your Event
@@ -96,7 +96,7 @@ const HeroSection = () => {
 
       {/* Scroll indicator */}
       <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        className="hidden sm:block absolute bottom-8 left-1/2 -translate-x-1/2"
         animate={{ y: [0, 10, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
       >

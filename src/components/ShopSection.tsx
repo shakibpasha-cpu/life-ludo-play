@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { ShoppingCart, Truck, Globe, Package, Ruler, Palette, MessageCircle, Check } from "lucide-react";
 import ludoBoard from "@/assets/ludo-board.jpeg";
+import { trackEvent } from "@/lib/analytics";
 
 const features = [
   { icon: Ruler, label: "Default Size", value: "20 × 20 feet" },
@@ -22,6 +23,7 @@ const ShopSection = () => {
   const handleOrderNow = () => {
     const sizeLabel = sizes.find(s => s.id === selectedSize)?.label || "20 × 20 ft";
     const message = `Hi! I'd like to order a Life-Size Ludo Game Kit.\n\n📏 Size: ${sizeLabel}\n${customNote ? `📝 Note: ${customNote}\n` : ""}\nPlease share pricing and delivery details.`;
+    trackEvent("shop_order_click", { size: sizeLabel, has_note: Boolean(customNote) });
     window.open(`https://wa.me/91XXXXXXXXXX?text=${encodeURIComponent(message)}`, "_blank");
   };
 

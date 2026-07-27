@@ -170,10 +170,12 @@ export type Database = {
           created_at: string
           email: string
           event_date: string | null
+          event_time: string | null
           event_type: string | null
           id: string
           message: string | null
           name: string
+          package: string | null
           participants: number | null
           phone: string
           source: string | null
@@ -185,10 +187,12 @@ export type Database = {
           created_at?: string
           email: string
           event_date?: string | null
+          event_time?: string | null
           event_type?: string | null
           id?: string
           message?: string | null
           name: string
+          package?: string | null
           participants?: number | null
           phone: string
           source?: string | null
@@ -200,10 +204,12 @@ export type Database = {
           created_at?: string
           email?: string
           event_date?: string | null
+          event_time?: string | null
           event_type?: string | null
           id?: string
           message?: string | null
           name?: string
+          package?: string | null
           participants?: number | null
           phone?: string
           source?: string | null

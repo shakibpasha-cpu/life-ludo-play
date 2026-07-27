@@ -1,0 +1,3 @@
+ALTER TABLE public.leads
+  ADD COLUMN IF NOT EXISTS event_time TEXT,
+  ADD COLUMN IF NOT EXISTS package TEXT;

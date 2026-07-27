@@ -60,6 +60,8 @@ const ShopSection = () => {
               <img
                 src={ludoBoard}
                 alt="Human Size Ludo Board - 20x20 feet"
+                loading="lazy"
+                decoding="async"
                 className="w-full h-auto object-cover"
               />
             </div>

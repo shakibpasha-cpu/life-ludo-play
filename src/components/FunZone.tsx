@@ -50,9 +50,13 @@ const FunZone = () => {
                 src={video.src}
                 muted
                 playsInline
-                preload="metadata"
+                preload="none"
                 className="w-full h-full object-cover"
-                onMouseEnter={(e) => (e.target as HTMLVideoElement).play()}
+                onMouseEnter={(e) => {
+                  const v = e.target as HTMLVideoElement;
+                  if (v.readyState === 0) v.load();
+                  void v.play().catch(() => undefined);
+                }}
                 onMouseLeave={(e) => {
                   const v = e.target as HTMLVideoElement;
                   v.pause();

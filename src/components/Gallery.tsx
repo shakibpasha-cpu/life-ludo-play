@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
+import { Skeleton } from "@/components/ui/skeleton";
 import gallery1 from "@/assets/gallery/gallery-1.jpeg";
 import gallery2 from "@/assets/gallery/gallery-2.jpeg";
 import gallery3 from "@/assets/gallery/gallery-3.jpeg";
@@ -52,6 +53,7 @@ const Gallery = () => {
   const [categories, setCategories] = useState<string[]>(["All"]);
   const [active, setActive] = useState("All");
   const [lightbox, setLightbox] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchGallery = async () => {
@@ -68,6 +70,7 @@ const Gallery = () => {
         const cats = ["All", ...Array.from(new Set(fallbackItems.map(d => d.category)))];
         setCategories(cats);
       }
+      setLoading(false);
     };
     fetchGallery();
   }, []);
@@ -107,7 +110,10 @@ const Gallery = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filtered.map((item, i) => (
+          {loading && Array.from({ length: 6 }).map((_, i) => (
+            <Skeleton key={`sk-${i}`} className="w-full aspect-video rounded-2xl" />
+          ))}
+          {!loading && filtered.map((item, i) => (
             <motion.div
               key={item.id}
               layout
@@ -120,6 +126,8 @@ const Gallery = () => {
               <img
                 src={item.image_url}
                 alt={item.title}
+                loading={i < 3 ? "eager" : "lazy"}
+                decoding="async"
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">

@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import PlayPage from "./pages/PlayPage";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
+import OAuthConsent from "./pages/OAuthConsent";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -22,6 +23,7 @@ const App = () => (
           <Route path="/play" element={<PlayPage />} />
           <Route path="/admin" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/.lovable/oauth/consent" element={<OAuthConsent />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

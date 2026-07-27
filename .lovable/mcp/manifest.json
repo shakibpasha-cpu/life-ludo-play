@@ -1,0 +1,186 @@
+{
+  "version": 1,
+  "sdk_version": "0.24.0",
+  "path": "/functions/v1/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://iuduknnbzgdlfbocifwo.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "human-size-ludo-mcp",
+      "version": "0.1.0",
+      "title": "Human Size Ludo CRM"
+    },
+    "tools": [
+      {
+        "name": "list_leads",
+        "title": "List leads",
+        "description": "List booking leads/enquiries for the Human Size Ludo Experience, newest first. Optionally filter by status.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "description": "Filter by lead status, e.g. new, contacted, confirmed_booking."
+            },
+            "limit": {
+              "type": "number",
+              "description": "Max number of leads to return (default 25)."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "create_lead",
+        "title": "Create lead",
+        "description": "Create a new booking enquiry (lead) for a Human Size Ludo event.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Contact name."
+            },
+            "phone": {
+              "type": "string",
+              "description": "Contact phone number."
+            },
+            "email": {
+              "type": "string",
+              "description": "Contact email address."
+            },
+            "city": {
+              "type": "string"
+            },
+            "event_type": {
+              "type": "string",
+              "description": "e.g. Corporate Team Building, Wedding, Family Event."
+            },
+            "event_date": {
+              "type": "string",
+              "description": "Event date in YYYY-MM-DD format."
+            },
+            "participants": {
+              "type": "number"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "phone",
+            "email"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "update_lead_status",
+        "title": "Update lead status",
+        "description": "Update the pipeline status of an existing lead (e.g. new, contacted, confirmed_booking, lost).",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "lead_id": {
+              "type": "string",
+              "description": "The lead's id."
+            },
+            "status": {
+              "type": "string",
+              "description": "New status value."
+            }
+          },
+          "required": [
+            "lead_id",
+            "status"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "add_lead_note",
+        "title": "Add lead note",
+        "description": "Attach a follow-up note to an existing lead.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "lead_id": {
+              "type": "string",
+              "description": "The lead's id."
+            },
+            "note": {
+              "type": "string",
+              "description": "Note text."
+            }
+          },
+          "required": [
+            "lead_id",
+            "note"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_follow_ups",
+        "title": "List follow-up reminders",
+        "description": "List CRM follow-up reminders, soonest first. Optionally only pending (incomplete) ones.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "only_pending": {
+              "type": "boolean",
+              "description": "When true, exclude completed reminders."
+            },
+            "limit": {
+              "type": "number",
+              "description": "Max reminders to return (default 25)."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}

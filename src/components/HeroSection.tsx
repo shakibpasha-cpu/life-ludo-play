@@ -4,13 +4,16 @@ import { CalendarCheck, Gamepad2, Dices } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import heroImage from "@/assets/hero-ludo.jpg";
 import diceImage from "@/assets/dice.png";
+import { trackEvent } from "@/lib/analytics";
 
 const HeroSection = () => {
   const navigate = useNavigate();
   const scrollToBooking = () => {
+    trackEvent("cta_book_click", { placement: "hero" });
     document.getElementById("booking")?.scrollIntoView({ behavior: "smooth" });
   };
   const goToDemo = () => {
+    trackEvent("cta_demo_click", { placement: "hero" });
     navigate("/play");
   };
 

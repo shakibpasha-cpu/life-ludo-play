@@ -11,9 +11,10 @@ import type { Tables } from "@/integrations/supabase/types";
 import {
   Dices, LogOut, Search, Filter, Users, CalendarDays,
   TrendingUp, Clock, MessageSquare, ChevronDown, Trash2,
-  Bell, CheckCircle, Plus, X, List, CalendarIcon, Image, ShoppingCart
+  Bell, CheckCircle, Plus, X, List, CalendarIcon, Image, ShoppingCart, BarChart3
 } from "lucide-react";
 import GalleryManager from "@/components/admin/GalleryManager";
+import AnalyticsPanel from "@/components/admin/AnalyticsPanel";
 
 type Lead = Tables<"leads">;
 type LeadNote = Tables<"lead_notes">;
@@ -46,7 +47,7 @@ const STATUS_COLORS: Record<LeadStatus, string> = {
   closed: "bg-muted text-muted-foreground",
 };
 
-type TabType = "leads" | "calendar" | "reminders" | "gallery" | "orders";
+type TabType = "leads" | "calendar" | "reminders" | "gallery" | "orders" | "analytics";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -280,6 +281,7 @@ const AdminDashboard = () => {
           {([
             { id: "leads" as TabType, label: "Leads", icon: List },
             { id: "orders" as TabType, label: "Orders", icon: ShoppingCart },
+            { id: "analytics" as TabType, label: "Analytics", icon: BarChart3 },
             { id: "calendar" as TabType, label: "Calendar", icon: CalendarIcon },
             { id: "reminders" as TabType, label: "Follow-ups", icon: Bell },
             { id: "gallery" as TabType, label: "Gallery", icon: Image },
@@ -728,6 +730,8 @@ const AdminDashboard = () => {
 
         {/* GALLERY TAB */}
         {activeTab === "gallery" && <GalleryManager />}
+
+        {activeTab === "analytics" && <AnalyticsPanel />}
       </div>
     </div>
   );

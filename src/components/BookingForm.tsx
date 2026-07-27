@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { trackEvent } from "@/lib/analytics";
 
 const eventTypes = ["Corporate Team Building", "Family Event", "Wedding", "School Activity", "Festival", "Birthday Party"];
 
@@ -14,8 +15,13 @@ const BookingForm = () => {
     name: "", phone: "", email: "", city: "", eventType: "", eventDate: "", participants: "", message: "",
   });
   const [submitting, setSubmitting] = useState(false);
+  const [startTracked, setStartTracked] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    if (!startTracked) {
+      setStartTracked(true);
+      trackEvent("booking_form_start", { field: e.target.name });
+    }
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
@@ -46,6 +52,7 @@ const BookingForm = () => {
     }
 
     toast.success("Thank you! We'll get back to you shortly 🎲");
+    trackEvent("booking_submitted", { event_type: form.eventType || null, city: form.city || null });
     setForm({ name: "", phone: "", email: "", city: "", eventType: "", eventDate: "", participants: "", message: "" });
     setSubmitting(false);
   };

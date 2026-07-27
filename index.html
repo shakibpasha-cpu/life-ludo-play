@@ -7,7 +7,8 @@
     <meta name="description" content="Experience Pakistan&#39;s most exciting life-size Ludo game. Perfect for corporate team building, family events, weddings, and festivals. Book your event today!">
     <meta name="keywords" content="Human Size Ludo, Life Size Ludo Game, Event Entertainment Game, Corporate Team Building Game, Family Fun Game" />
     <meta name="author" content="Human Size Ludo Experience" />
-    <link rel="canonical" href="https://humansizeludo.com" />
+    <link rel="canonical" href="https://life-ludo-play.lovable.app/" />
+    <meta property="og:url" content="https://life-ludo-play.lovable.app/" />
 
     
     
@@ -20,9 +21,127 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "EntertainmentBusiness",
-      "name": "Human Size Ludo Experience",
-      "description": "Life-size Ludo game experience for events, corporate team building, and celebrations"
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://life-ludo-play.lovable.app/#organization",
+          "name": "Human Size Ludo Experience",
+          "url": "https://life-ludo-play.lovable.app/",
+          "description": "Life-size Ludo game experiences and 20x20 feet Ludo game kits for corporate events, weddings, schools and family celebrations.",
+          "email": "hello@humansizeludo.com",
+          "areaServed": [
+            { "@type": "Country", "name": "Pakistan" },
+            { "@type": "Place", "name": "Worldwide (game kit delivery)" }
+          ],
+          "contactPoint": [
+            {
+              "@type": "ContactPoint",
+              "contactType": "sales",
+              "email": "hello@humansizeludo.com",
+              "availableLanguage": ["en", "ur"],
+              "areaServed": "PK"
+            }
+          ]
+        },
+        {
+          "@type": ["LocalBusiness", "EntertainmentBusiness"],
+          "@id": "https://life-ludo-play.lovable.app/#localbusiness",
+          "name": "Human Size Ludo Experience",
+          "url": "https://life-ludo-play.lovable.app/",
+          "parentOrganization": { "@id": "https://life-ludo-play.lovable.app/#organization" },
+          "description": "Pakistan's life-size Human Size Ludo game — a hosted 20x20 feet real-life Ludo arena for corporate team building, weddings, festivals and family events.",
+          "priceRange": "$$",
+          "email": "hello@humansizeludo.com",
+          "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "PK"
+          },
+          "areaServed": { "@type": "Country", "name": "Pakistan" },
+          "makesOffer": [
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Human Size Ludo event booking",
+                "serviceType": "Life-size Ludo game experience for events",
+                "areaServed": { "@type": "Country", "name": "Pakistan" }
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Product",
+                "name": "Life-Size Ludo Game Kit (20x20 ft)",
+                "description": "Portable 20x20 feet life-size Ludo game kit with giant dice and player pieces. Custom sizes available. Delivered across Pakistan and shipped worldwide."
+              }
+            }
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://life-ludo-play.lovable.app/#website",
+          "url": "https://life-ludo-play.lovable.app/",
+          "name": "Human Size Ludo Experience",
+          "publisher": { "@id": "https://life-ludo-play.lovable.app/#organization" }
+        },
+        {
+          "@type": "EventSeries",
+          "@id": "https://life-ludo-play.lovable.app/#eventseries",
+          "name": "Human Size Ludo Experience Events",
+          "description": "Hosted life-size Ludo events run on demand across Pakistan for corporate team building, weddings, schools, festivals and private parties.",
+          "url": "https://life-ludo-play.lovable.app/#booking",
+          "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+          "eventStatus": "https://schema.org/EventScheduled",
+          "organizer": { "@id": "https://life-ludo-play.lovable.app/#organization" },
+          "location": {
+            "@type": "Place",
+            "name": "Client venue across Pakistan",
+            "address": { "@type": "PostalAddress", "addressCountry": "PK" }
+          },
+          "offers": {
+            "@type": "Offer",
+            "url": "https://life-ludo-play.lovable.app/#booking",
+            "availability": "https://schema.org/InStock",
+            "category": "Event booking"
+          }
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://life-ludo-play.lovable.app/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is the Human Size Ludo Experience?",
+              "acceptedAnswer": { "@type": "Answer", "text": "It is a real-life, life-size version of Ludo played on a 20x20 feet board where guests become the game pieces, roll a giant dice and move square by square. It is hosted by our team with music, referees and props." }
+            },
+            {
+              "@type": "Question",
+              "name": "How much space do I need for a life-size Ludo setup?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Our standard arena is 20x20 feet, so a clear indoor hall or outdoor lawn of roughly 25x25 feet is ideal. We also build custom sizes for smaller or larger venues." }
+            },
+            {
+              "@type": "Question",
+              "name": "How many people can play at once?",
+              "acceptedAnswer": { "@type": "Answer", "text": "A single game runs with 4 teams and works best with 4 to 40 players. For larger events we run rotating rounds and can accommodate up to 2000 guests across the day." }
+            },
+            {
+              "@type": "Question",
+              "name": "Which events is life-size Ludo suitable for?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Corporate team building, weddings and mehndi nights, family gatherings, school and university activities, festivals, birthdays and mall activations." }
+            },
+            {
+              "@type": "Question",
+              "name": "Do you deliver the Ludo game kit across Pakistan and worldwide?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Yes. We deliver domestically anywhere in Pakistan via courier and ship internationally worldwide. Customised sizes, colours and branding are available." }
+            },
+            {
+              "@type": "Question",
+              "name": "How do I book the Human Size Ludo Experience?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Fill in the booking form on this page with your event date, preferred time slot and package, or message us on WhatsApp. We reply with a tailored quote, usually the same day." }
+            }
+          ]
+        }
+      ]
     }
     </script>
     <meta property="og:title" content="Human Size Ludo Experience | Life-Size Ludo Game for Events">

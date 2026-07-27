@@ -14,6 +14,7 @@ const Gallery = lazy(() => import("@/components/Gallery"));
 const FunZone = lazy(() => import("@/components/FunZone"));
 const LudoDemo = lazy(() => import("@/components/LudoDemo"));
 const Testimonials = lazy(() => import("@/components/Testimonials"));
+const FAQSection = lazy(() => import("@/components/FAQSection"));
 
 const Index = () => {
   return (
@@ -37,6 +38,9 @@ const Index = () => {
         </Suspense>
         <Suspense fallback={<SectionSkeleton tiles={3} />}>
           <Testimonials />
+        </Suspense>
+        <Suspense fallback={<SectionSkeleton tiles={1} />}>
+          <FAQSection />
         </Suspense>
         <BookingForm />
         <ContactSection />

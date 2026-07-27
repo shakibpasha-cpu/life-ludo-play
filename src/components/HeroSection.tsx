@@ -31,6 +31,7 @@ const HeroSection = () => {
         <div className="absolute inset-0 bg-background/20" />
         <div className="absolute inset-0" style={{ background: "var(--gradient-hero)" }} />
         <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-background/85 to-transparent" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_65%_40%_at_50%_60%,hsl(var(--background)/0.8),transparent_72%)]" />
         <div className="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-background via-background/60 to-transparent" />
       </div>
 

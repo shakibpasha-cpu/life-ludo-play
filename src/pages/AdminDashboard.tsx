@@ -730,6 +730,8 @@ const AdminDashboard = () => {
 
         {/* GALLERY TAB */}
         {activeTab === "gallery" && <GalleryManager />}
+
+        {activeTab === "analytics" && <AnalyticsPanel />}
       </div>
     </div>
   );

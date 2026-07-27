@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,6 +8,9 @@ import { Dices } from "lucide-react";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const rawNext = params.get("next") ?? "";
+  const nextPath = rawNext.startsWith("/") && !rawNext.startsWith("//") ? rawNext : "";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -18,7 +21,13 @@ const AdminLogin = () => {
     setLoading(true);
 
     if (isSignUp) {
-      const { error } = await supabase.auth.signUp({ email, password });
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}${nextPath || "/admin"}`,
+        },
+      });
       if (error) {
         toast.error(error.message);
         setLoading(false);
@@ -41,6 +50,11 @@ const AdminLogin = () => {
     if (!user) {
       toast.error("Authentication failed");
       setLoading(false);
+      return;
+    }
+
+    if (nextPath) {
+      window.location.href = nextPath;
       return;
     }
 

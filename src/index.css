@@ -52,6 +52,9 @@ All colors MUST be HSL.
 
     --shadow-glow: 0 0 40px hsl(45 100% 55% / 0.15);
     --shadow-card: 0 8px 32px hsl(0 0% 0% / 0.3);
+    --shadow-soft: 0 1px 2px hsl(0 0% 0% / 0.3), 0 8px 24px -12px hsl(0 0% 0% / 0.5);
+    --shadow-lift: 0 18px 40px -18px hsl(0 0% 0% / 0.65);
+    --transition-smooth: 320ms cubic-bezier(0.22, 1, 0.36, 1);
 
     --sidebar-background: 240 8% 10%;
     --sidebar-foreground: 45 20% 95%;
@@ -102,6 +105,8 @@ All colors MUST be HSL.
 
     --shadow-glow: 0 0 40px hsl(45 100% 45% / 0.1);
     --shadow-card: 0 4px 20px hsl(0 0% 0% / 0.08);
+    --shadow-soft: 0 1px 2px hsl(240 20% 20% / 0.06), 0 8px 24px -14px hsl(240 20% 20% / 0.18);
+    --shadow-lift: 0 20px 44px -20px hsl(240 20% 20% / 0.28);
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 10% 10%;
@@ -131,6 +136,16 @@ All colors MUST be HSL.
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-display;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: hsl(var(--primary) / 0.25);
   }
 }
 
@@ -150,7 +165,36 @@ All colors MUST be HSL.
 
   .glass-card {
     @apply bg-card/60 backdrop-blur-xl border border-border/50;
-    box-shadow: var(--shadow-card);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .card-lift {
+    transition: transform var(--transition-smooth), box-shadow var(--transition-smooth),
+      border-color var(--transition-smooth);
+  }
+
+  .card-lift:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lift);
+    @apply border-primary/40;
+  }
+
+  .section-eyebrow {
+    @apply inline-flex items-center gap-2 rounded-full border border-border bg-secondary/60 px-3.5 py-1.5
+      text-[11px] font-body font-medium uppercase tracking-[0.18em] text-muted-foreground;
+  }
+
+  .link-underline {
+    @apply relative text-muted-foreground transition-colors hover:text-foreground;
+  }
+
+  .link-underline::after {
+    content: "";
+    @apply absolute -bottom-1 left-0 h-px w-0 bg-primary transition-all duration-300;
+  }
+
+  .link-underline:hover::after {
+    @apply w-full;
   }
 
   .glow-text {

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { CalendarCheck, Gamepad2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -50,14 +51,15 @@ const BookingForm = () => {
   };
 
   return (
-    <section className="py-16 md:py-24 px-4 bg-secondary/30" id="booking">
+    <section className="py-20 md:py-28 px-4 bg-secondary/30 border-y border-border/60" id="booking">
       <div className="max-w-3xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          className="text-center mb-12 md:mb-16"
         >
+          <span className="section-eyebrow mb-5">Booking</span>
           <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">
             Book Your <span className="text-gradient-ludo">Experience</span>
           </h2>
@@ -69,7 +71,7 @@ const BookingForm = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           onSubmit={handleSubmit}
-          className="glass-card rounded-2xl p-5 sm:p-8 space-y-5"
+          className="glass-card rounded-2xl p-6 sm:p-9 space-y-5"
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
             <Input name="name" placeholder="Your Name *" value={form.name} onChange={handleChange} className="bg-background/50 border-border h-12" required />
@@ -80,7 +82,7 @@ const BookingForm = () => {
               name="eventType"
               value={form.eventType}
               onChange={handleChange}
-              className="h-12 w-full rounded-lg border border-border bg-background/50 px-3 text-sm text-foreground"
+              className="h-12 w-full rounded-lg border border-border bg-background/50 px-3 text-sm text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
             >
               <option value="">Select Event Type</option>
               {eventTypes.map(t => <option key={t} value={t}>{t}</option>)}
@@ -89,14 +91,15 @@ const BookingForm = () => {
             <Input name="participants" type="number" placeholder="Number of Participants" value={form.participants} onChange={handleChange} className="bg-background/50 border-border h-12" />
           </div>
           <Textarea name="message" placeholder="Tell us about your event..." value={form.message} onChange={handleChange} className="bg-background/50 border-border min-h-[100px]" />
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col sm:flex-row gap-4 pt-1">
             <Button type="submit" variant="hero" size="lg" className="flex-1" disabled={submitting}>
-              {submitting ? "Submitting..." : "🎯 Request Quote"}
+              {submitting ? "Submitting..." : (<><CalendarCheck className="w-5 h-5" />Request Quote</>)}
             </Button>
             <Button type="button" variant="heroOutline" size="lg" className="flex-1" onClick={() => {
               toast.info("Demo booking request sent!");
             }}>
-              🎮 Book Demo
+              <Gamepad2 className="w-5 h-5" />
+              Book Demo
             </Button>
           </div>
         </motion.form>

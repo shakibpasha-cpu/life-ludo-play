@@ -14,6 +14,50 @@ export type Database = {
   }
   public: {
     Tables: {
+      analytics_events: {
+        Row: {
+          created_at: string
+          event_name: string
+          id: string
+          lead_id: string | null
+          metadata: Json
+          page_path: string
+          referrer: string | null
+          session_id: string
+          source: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_name: string
+          id?: string
+          lead_id?: string | null
+          metadata?: Json
+          page_path?: string
+          referrer?: string | null
+          session_id: string
+          source?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_name?: string
+          id?: string
+          lead_id?: string | null
+          metadata?: Json
+          page_path?: string
+          referrer?: string | null
+          session_id?: string
+          source?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "analytics_events_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       follow_up_reminders: {
         Row: {
           completed: boolean

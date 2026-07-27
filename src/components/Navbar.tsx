@@ -29,24 +29,37 @@ const Navbar = () => {
     }
   }, [dark]);
 
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/50">
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-xl transition-all duration-300 ${
+        scrolled ? "bg-background/90 border-b border-border shadow-sm" : "bg-background/50 border-b border-transparent"
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-        <a href="#" className="flex items-center gap-2 font-display font-bold text-xl">
+        <a href="#" className="flex items-center gap-2 font-display font-bold text-lg sm:text-xl tracking-tight transition-opacity hover:opacity-80">
           <Dices className="w-7 h-7 text-primary" />
           <span>Human Size <span className="text-primary">Ludo</span></span>
         </a>
 
         {/* Desktop */}
-        <div className="hidden lg:flex items-center gap-5 xl:gap-6">
+        <div className="hidden lg:flex items-center gap-6 xl:gap-7">
           {links.map(l => (
-            <a key={l.label} href={l.href} className="text-sm whitespace-nowrap text-muted-foreground hover:text-foreground transition-colors font-body">
+            <a key={l.label} href={l.href} className="link-underline text-sm whitespace-nowrap font-body">
               {l.label}
             </a>
           ))}
           <button
             onClick={() => setDark(!dark)}
-            className="p-2 rounded-full bg-secondary hover:bg-secondary/80 transition-colors"
+            className="p-2 rounded-full border border-border bg-secondary/70 hover:bg-secondary transition-colors"
             aria-label="Toggle theme"
           >
             {dark ? <Sun className="w-4 h-4 text-primary" /> : <Moon className="w-4 h-4 text-foreground" />}

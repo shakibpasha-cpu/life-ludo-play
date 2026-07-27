@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { CalendarCheck, Gamepad2, Dices } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import heroImage from "@/assets/hero-ludo.jpg";
 import diceImage from "@/assets/dice.png";
@@ -29,6 +30,8 @@ const HeroSection = () => {
         </video>
         <div className="absolute inset-0 bg-background/40" />
         <div className="absolute inset-0" style={{ background: "var(--gradient-hero)" }} />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/30 to-background" />
+        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-background/80 to-transparent" />
       </div>
 
       {/* Floating dice */}
@@ -54,8 +57,9 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <span className="inline-block px-3 sm:px-4 py-2 rounded-full bg-secondary border border-border text-xs sm:text-sm font-body text-muted-foreground mb-6">
-            🎲 Pakistan's Most Exciting Life-Size Game
+          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-background/70 backdrop-blur-md border border-border shadow-sm text-[11px] sm:text-xs font-body font-medium uppercase tracking-[0.16em] text-foreground/80 mb-7">
+            <Dices className="w-3.5 h-3.5 text-primary" />
+            Pakistan's Most Exciting Life-Size Game
           </span>
         </motion.div>
 
@@ -63,7 +67,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-display font-black leading-tight mb-5 sm:mb-6"
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-black leading-[1.05] tracking-tight mb-5 sm:mb-7 [text-shadow:0_2px_24px_hsl(var(--background)/0.8)]"
         >
           Step Into The Game –{" "}
           <span className="text-gradient-ludo">Become The Ludo Piece!</span>
@@ -73,7 +77,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-8 sm:mb-10"
+          className="text-base sm:text-lg md:text-xl text-foreground/75 max-w-2xl mx-auto mb-9 sm:mb-11 leading-relaxed"
         >
           Experience the world's most exciting life-size Ludo game for families,
           corporate events, and celebrations.
@@ -86,10 +90,12 @@ const HeroSection = () => {
           className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-stretch sm:items-center"
         >
           <Button variant="hero" size="xl" onClick={scrollToBooking}>
-            🎯 Book Your Event
+            <CalendarCheck className="w-5 h-5" />
+            Book Your Event
           </Button>
           <Button variant="heroOutline" size="xl" onClick={goToDemo}>
-            🎮 Try Live Demo
+            <Gamepad2 className="w-5 h-5" />
+            Try Live Demo
           </Button>
         </motion.div>
       </div>

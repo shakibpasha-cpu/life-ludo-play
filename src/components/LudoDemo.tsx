@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import diceImage from "@/assets/dice.png";
+import { trackEvent } from "@/lib/analytics";
 
 const BOARD_SIZE = 10;
 const TEAM_COLORS = ["ludo-red", "ludo-blue", "ludo-green", "ludo-yellow"];
@@ -57,6 +58,7 @@ const LudoDemo = () => {
   const rollDice = useCallback(() => {
     if (rolling) return;
     setRolling(true);
+    trackEvent("demo_played", { placement: "homepage_demo" });
 
     // Animate dice
     let count = 0;

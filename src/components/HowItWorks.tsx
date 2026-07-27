@@ -11,7 +11,7 @@ const steps = [
 
 const HowItWorks = () => {
   return (
-    <section className="py-24 px-4 relative overflow-hidden" id="how-it-works">
+    <section className="py-16 md:py-24 px-4 relative overflow-hidden" id="how-it-works">
       <div className="absolute inset-0 bg-ludo-glow opacity-50" />
       <div className="max-w-6xl mx-auto relative z-10">
         <motion.div
@@ -23,12 +23,12 @@ const HowItWorks = () => {
           <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">
             How It <span className="text-gradient-ludo">Works</span>
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto">
             Five simple steps to the most exciting game you've ever played
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
           {steps.map((step, i) => (
             <motion.div
               key={step.title}

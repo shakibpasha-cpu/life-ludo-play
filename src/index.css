@@ -121,6 +121,12 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground font-body antialiased;
+    overflow-x: hidden;
+  }
+
+  html {
+    @apply overflow-x-hidden;
+    scroll-behavior: smooth;
   }
 
   h1, h2, h3, h4, h5, h6 {

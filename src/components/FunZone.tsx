@@ -18,18 +18,19 @@ const FunZone = () => {
   const [activeVideo, setActiveVideo] = useState<number | null>(null);
 
   return (
-    <section className="py-16 md:py-24 px-4 bg-secondary/30" id="fun-zone">
+    <section className="py-20 md:py-28 px-4 bg-secondary/30 border-y border-border/60" id="fun-zone">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          className="text-center mb-10 md:mb-14"
         >
+          <span className="section-eyebrow mb-5">Video</span>
           <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">
-            🎬 Fun <span className="text-gradient-ludo">Zone</span>
+            Fun <span className="text-gradient-ludo">Zone</span>
           </h2>
-          <p className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
             Watch the excitement unfold — real moments from our life-size game events!
           </p>
         </motion.div>
@@ -42,7 +43,7 @@ const FunZone = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.05 }}
-              className="relative group cursor-pointer rounded-2xl overflow-hidden aspect-[9/16] bg-foreground/5 shadow-lg hover:shadow-xl transition-shadow"
+              className="relative group cursor-pointer rounded-2xl overflow-hidden aspect-[9/16] bg-foreground/5 border border-border/60 transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-lift)]"
               onClick={() => setActiveVideo(i)}
             >
               <video

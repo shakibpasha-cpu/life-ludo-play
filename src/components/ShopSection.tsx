@@ -26,18 +26,22 @@ const ShopSection = () => {
   };
 
   return (
-    <section className="py-16 md:py-24 px-4 bg-secondary/20" id="shop">
+    <section className="py-20 md:py-28 px-4 bg-secondary/20 border-y border-border/60" id="shop">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-14"
+          className="text-center mb-14 md:mb-20"
         >
+          <span className="section-eyebrow mb-5">
+            <ShoppingCart className="w-3.5 h-3.5 text-primary" />
+            Shop
+          </span>
           <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">
-            🛒 Get Your <span className="text-gradient-ludo">Ludo Game Kit</span>
+            Get Your <span className="text-gradient-ludo">Ludo Game Kit</span>
           </h2>
-          <p className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
             Own the ultimate life-size Ludo game experience — delivered to your doorstep anywhere in Pakistan or worldwide!
           </p>
         </motion.div>
@@ -50,15 +54,16 @@ const ShopSection = () => {
             viewport={{ once: true }}
             className="relative"
           >
-            <div className="rounded-2xl overflow-hidden shadow-2xl border border-border">
+            <div className="rounded-2xl overflow-hidden border border-border" style={{ boxShadow: "var(--shadow-lift)" }}>
               <img
                 src={ludoBoard}
                 alt="Human Size Ludo Board - 20x20 feet"
                 className="w-full h-auto object-cover"
               />
             </div>
-            <div className="absolute -bottom-3 right-2 sm:-bottom-4 sm:-right-4 bg-primary text-primary-foreground px-4 sm:px-5 py-2 rounded-xl font-display font-bold text-xs sm:text-sm shadow-lg">
-              🎲 Life-Size Board
+            <div className="absolute -bottom-3 right-2 sm:-bottom-4 sm:-right-4 inline-flex items-center gap-2 bg-primary text-primary-foreground px-4 sm:px-5 py-2.5 rounded-xl font-display font-bold text-xs sm:text-sm shadow-lg">
+              <Package className="w-4 h-4" />
+              Life-Size Board
             </div>
           </motion.div>
 
@@ -74,7 +79,7 @@ const ShopSection = () => {
               {features.map((f, i) => (
                 <div
                   key={i}
-                  className="flex items-center gap-3 p-3 rounded-xl bg-background border border-border min-w-0"
+                  className="flex items-center gap-3 p-3.5 rounded-xl bg-background border border-border min-w-0 transition-colors hover:border-primary/40"
                 >
                   <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
                     <f.icon className="w-5 h-5 text-primary" />
@@ -99,8 +104,8 @@ const ShopSection = () => {
                     onClick={() => setSelectedSize(size.id)}
                     className={`relative p-4 rounded-xl border-2 text-left transition-all ${
                       selectedSize === size.id
-                        ? "border-primary bg-primary/5"
-                        : "border-border bg-background hover:border-primary/40"
+                        ? "border-primary bg-primary/5 shadow-sm"
+                        : "border-border bg-background hover:-translate-y-0.5 hover:border-primary/40"
                     }`}
                   >
                     {selectedSize === size.id && (
@@ -155,14 +160,14 @@ const ShopSection = () => {
             {/* Order Button */}
             <button
               onClick={handleOrderNow}
-              className="w-full py-4 rounded-xl bg-primary text-primary-foreground font-display font-bold text-lg flex items-center justify-center gap-3 hover:opacity-90 transition-opacity shadow-lg"
+              className="w-full py-4 rounded-xl bg-primary text-primary-foreground font-display font-bold text-lg flex items-center justify-center gap-3 shadow-[0_10px_30px_-12px_hsl(var(--primary)/0.9)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary/90 hover:shadow-[0_18px_38px_-14px_hsl(var(--primary)/0.9)] active:scale-[0.99]"
             >
               <MessageCircle className="w-5 h-5" />
               Order via WhatsApp
             </button>
 
             <p className="text-xs text-center text-muted-foreground">
-              💬 Chat with us for pricing, bulk orders & custom designs
+              Chat with us for pricing, bulk orders &amp; custom designs
             </p>
           </motion.div>
         </div>

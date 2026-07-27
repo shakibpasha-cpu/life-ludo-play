@@ -75,28 +75,30 @@ const Gallery = () => {
   const filtered = active === "All" ? items : items.filter(g => g.category === active);
 
   return (
-    <section className="py-24 px-4" id="gallery">
+    <section className="py-20 md:py-28 px-4" id="gallery">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          className="text-center mb-10 md:mb-14"
         >
+          <span className="section-eyebrow mb-5">Our Work</span>
           <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">
             Event <span className="text-gradient-ludo">Gallery</span>
           </h2>
+          <p className="text-muted-foreground text-base md:text-lg">Real setups, real smiles, all over Pakistan</p>
         </motion.div>
 
-        <div className="flex flex-wrap gap-3 justify-center mb-10">
+        <div className="flex flex-wrap gap-2.5 justify-center mb-10 md:mb-12">
           {categories.map(cat => (
             <button
               key={cat}
               onClick={() => setActive(cat)}
-              className={`px-5 py-2 rounded-full font-body text-sm transition-all duration-300 ${
+              className={`px-5 py-2 rounded-full font-body text-sm border transition-all duration-300 ${
                 active === cat
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-secondary text-muted-foreground hover:bg-secondary/80"
+                  ? "border-primary bg-primary text-primary-foreground shadow-sm"
+                  : "border-border bg-secondary/60 text-muted-foreground hover:border-primary/40 hover:text-foreground"
               }`}
             >
               {cat}
@@ -112,7 +114,7 @@ const Gallery = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="relative group cursor-pointer overflow-hidden rounded-xl aspect-video"
+              className="relative group cursor-pointer overflow-hidden rounded-2xl aspect-video border border-border/60 transition-shadow duration-300 hover:shadow-[var(--shadow-lift)]"
               onClick={() => setLightbox(i)}
             >
               <img
@@ -120,8 +122,8 @@ const Gallery = () => {
                 alt={item.title}
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
               />
-              <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <span className="font-display font-bold text-lg">{item.title}</span>
+              <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
+                <span className="font-display font-bold text-base">{item.title}</span>
               </div>
             </motion.div>
           ))}

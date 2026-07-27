@@ -243,15 +243,15 @@ const AdminDashboard = () => {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b border-border bg-card/50 backdrop-blur-lg sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Dices className="w-7 h-7 text-primary" />
-            <h1 className="font-display font-bold text-xl">CRM Dashboard</h1>
+        <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <Dices className="w-6 h-6 sm:w-7 sm:h-7 text-primary shrink-0" />
+            <h1 className="font-display font-bold text-base sm:text-xl truncate">CRM Dashboard</h1>
           </div>
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" onClick={() => navigate("/")}>View Site</Button>
+          <div className="flex items-center gap-1 sm:gap-3 shrink-0">
+            <Button variant="ghost" size="sm" className="hidden sm:inline-flex" onClick={() => navigate("/")}>View Site</Button>
             <Button variant="ghost" size="sm" onClick={handleLogout}>
-              <LogOut className="w-4 h-4 mr-1" /> Logout
+              <LogOut className="w-4 h-4 sm:mr-1" /> <span className="hidden sm:inline">Logout</span>
             </Button>
           </div>
         </div>
@@ -259,7 +259,7 @@ const AdminDashboard = () => {
 
       <div className="max-w-7xl mx-auto p-4 space-y-6">
         {/* Analytics Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
           {[
             { icon: Users, label: "Total Leads", value: totalLeads, color: "text-ludo-blue" },
             { icon: CalendarDays, label: "This Month", value: thisMonth, color: "text-ludo-green" },
@@ -267,16 +267,16 @@ const AdminDashboard = () => {
             { icon: Clock, label: "Upcoming Events", value: upcoming, color: "text-ludo-red" },
             { icon: Bell, label: "Pending Reminders", value: pendingReminders, color: "text-ludo-yellow" },
           ].map(stat => (
-            <div key={stat.label} className="glass-card rounded-xl p-5">
+            <div key={stat.label} className="glass-card rounded-xl p-4 sm:p-5">
               <stat.icon className={`w-6 h-6 mb-2 ${stat.color}`} />
-              <p className="text-2xl font-display font-bold">{stat.value}</p>
-              <p className="text-muted-foreground text-sm">{stat.label}</p>
+              <p className="text-xl sm:text-2xl font-display font-bold">{stat.value}</p>
+              <p className="text-muted-foreground text-xs sm:text-sm">{stat.label}</p>
             </div>
           ))}
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-2 border-b border-border pb-0">
+        <div className="flex gap-1 sm:gap-2 border-b border-border pb-0 overflow-x-auto scrollbar-none">
           {([
             { id: "leads" as TabType, label: "Leads", icon: List },
             { id: "orders" as TabType, label: "Orders", icon: ShoppingCart },
@@ -287,7 +287,7 @@ const AdminDashboard = () => {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-4 py-2.5 text-sm font-bold border-b-2 transition-colors -mb-px ${
+              className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 text-sm font-bold border-b-2 transition-colors -mb-px whitespace-nowrap shrink-0 ${
                 activeTab === tab.id
                   ? "border-primary text-primary"
                   : "border-transparent text-muted-foreground hover:text-foreground"

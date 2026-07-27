@@ -95,7 +95,7 @@ const LudoDemo = () => {
   };
 
   return (
-    <section className="py-24 px-4" id="demo">
+    <section className="py-16 md:py-24 px-4" id="demo">
       <div className="max-w-5xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -106,16 +106,16 @@ const LudoDemo = () => {
           <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">
             Try The <span className="text-gradient-ludo">Demo</span>
           </h2>
-          <p className="text-muted-foreground text-lg">Click the dice to roll and watch your piece move!</p>
+          <p className="text-muted-foreground text-base md:text-lg">Click the dice to roll and watch your piece move!</p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-start">
           {/* Mini Board */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="lg:col-span-2 glass-card rounded-2xl p-4 md:p-6"
+            className="lg:col-span-2 glass-card rounded-2xl p-3 sm:p-4 md:p-6"
           >
             <div className="grid grid-cols-10 grid-rows-10 gap-0.5 aspect-square max-w-md mx-auto">
               {Array.from({ length: BOARD_SIZE * BOARD_SIZE }).map((_, idx) => {
@@ -164,11 +164,11 @@ const LudoDemo = () => {
           </motion.div>
 
           {/* Controls */}
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {/* Current turn */}
-            <div className="glass-card rounded-2xl p-6 text-center">
+            <div className="glass-card rounded-2xl p-5 sm:p-6 text-center">
               <p className="text-muted-foreground text-sm mb-2">Current Turn</p>
-              <p className="font-display font-bold text-2xl">
+              <p className="font-display font-bold text-xl sm:text-2xl">
                 {TEAM_EMOJIS[currentTeam]} {TEAM_NAMES[currentTeam]} Team
               </p>
             </div>

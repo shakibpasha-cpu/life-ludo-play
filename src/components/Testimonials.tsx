@@ -9,7 +9,7 @@ const testimonials = [
 
 const Testimonials = () => {
   return (
-    <section className="py-24 px-4">
+    <section className="py-16 md:py-24 px-4">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -22,7 +22,7 @@ const Testimonials = () => {
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
           {testimonials.map((t, i) => (
             <motion.div
               key={t.name}
@@ -30,7 +30,7 @@ const Testimonials = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.15 }}
-              className="glass-card rounded-2xl p-8"
+              className="glass-card rounded-2xl p-6 sm:p-8"
             >
               <div className="flex gap-1 mb-4">
                 {Array.from({ length: t.rating }).map((_, j) => (

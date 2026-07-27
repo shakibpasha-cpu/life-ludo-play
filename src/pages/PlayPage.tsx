@@ -160,7 +160,7 @@ const PlayPage = () => {
 
           <div className="glass-card rounded-2xl p-6 mb-6">
             <h3 className="font-display font-bold text-lg mb-3">Teams</h3>
-            <div className="grid grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 xs:grid-cols-4 gap-3">
               {TEAMS.map(team => (
                 <div
                   key={team}
@@ -177,11 +177,11 @@ const PlayPage = () => {
             </div>
           </div>
 
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <Button variant="heroOutline" size="lg" className="flex-1" onClick={() => navigate("/")}>
               ← Back
             </Button>
-            <Button variant="hero" size="xl" className="flex-[2]" onClick={() => setGameStarted(true)}>
+            <Button variant="hero" size="xl" className="sm:flex-[2]" onClick={() => setGameStarted(true)}>
               🎮 Start Game
             </Button>
           </div>
@@ -191,9 +191,9 @@ const PlayPage = () => {
   }
 
   return (
-    <div className="h-screen bg-background flex flex-col lg:flex-row overflow-hidden">
+    <div className="min-h-screen lg:h-screen bg-background flex flex-col lg:flex-row lg:overflow-hidden">
       {/* 3D Game View */}
-      <div className="flex-1 relative">
+      <div className="flex-1 relative min-h-[70vh] lg:min-h-0 pb-28 lg:pb-0">
         <Board2D
           gameState={gameState}
           onRollDice={handleRollDice}
@@ -201,7 +201,7 @@ const PlayPage = () => {
         />
 
         {/* Dice overlay for 2D display */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
+        <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-20">
           {gameState.currentTeam === "red" && !gameState.rolling && !gameState.diceValue && (
             <Button variant="hero" size="xl" onClick={handleRollDice}>
               🎲 Roll Dice
@@ -221,7 +221,7 @@ const PlayPage = () => {
       </div>
 
       {/* Side panel */}
-      <div className="w-full lg:w-80 p-4 lg:p-6 flex flex-col gap-4 lg:border-l border-border bg-card/50 backdrop-blur overflow-y-auto">
+      <div className="w-full lg:w-80 shrink-0 p-4 lg:p-6 flex flex-col gap-4 border-t lg:border-t-0 lg:border-l border-border bg-card/50 backdrop-blur lg:overflow-y-auto">
         <div className="flex items-center justify-between">
           <h2 className="font-display font-bold text-xl">🎲 Ludo</h2>
           <Button variant="ghost" size="sm" onClick={() => navigate("/")}>✕</Button>
@@ -288,17 +288,17 @@ const PlayPage = () => {
             <motion.div
               initial={{ scale: 0.8, y: 30 }}
               animate={{ scale: 1, y: 0 }}
-              className="glass-card rounded-3xl p-10 max-w-lg w-full text-center"
+              className="glass-card rounded-3xl p-6 sm:p-10 max-w-lg w-full text-center max-h-[90vh] overflow-y-auto"
             >
               <span className="text-6xl block mb-4">🏆</span>
-              <h2 className="text-3xl md:text-4xl font-display font-black mb-2">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-display font-black mb-2">
                 {TEAM_EMOJIS[gameState.winner!]} {TEAM_LABELS[gameState.winner!]} Wins!
               </h2>
               <p className="text-muted-foreground text-lg mb-8">
                 What an incredible game!
               </p>
 
-              <div className="glass-card rounded-2xl p-6 mb-8">
+              <div className="glass-card rounded-2xl p-4 sm:p-6 mb-6 sm:mb-8">
                 <h3 className="text-xl font-display font-bold mb-2 text-gradient-ludo">
                   Want to experience this in real life?
                 </h3>

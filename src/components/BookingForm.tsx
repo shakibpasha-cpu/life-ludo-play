@@ -174,26 +174,132 @@ const BookingForm = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           onSubmit={handleSubmit}
-          className="glass-card rounded-2xl p-6 sm:p-9 space-y-5"
+          className="glass-card rounded-2xl p-6 sm:p-9 space-y-7"
+          noValidate
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-            <Input name="name" placeholder="Your Name *" value={form.name} onChange={handleChange} className="bg-background/50 border-border h-12" required />
-            <Input name="phone" placeholder="Phone Number *" value={form.phone} onChange={handleChange} className="bg-background/50 border-border h-12" required />
-            <Input name="email" type="email" placeholder="Email *" value={form.email} onChange={handleChange} className="bg-background/50 border-border h-12" required />
-            <Input name="city" placeholder="City" value={form.city} onChange={handleChange} className="bg-background/50 border-border h-12" />
-            <select
-              name="eventType"
-              value={form.eventType}
-              onChange={handleChange}
-              className="h-12 w-full rounded-lg border border-border bg-background/50 px-3 text-sm text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
-            >
-              <option value="">Select Event Type</option>
-              {eventTypes.map(t => <option key={t} value={t}>{t}</option>)}
-            </select>
-            <Input name="eventDate" type="date" placeholder="Event Date" value={form.eventDate} onChange={handleChange} className="bg-background/50 border-border h-12" />
-            <Input name="participants" type="number" placeholder="Number of Participants" value={form.participants} onChange={handleChange} className="bg-background/50 border-border h-12" />
+            <div>
+              <Label htmlFor="bf-name" className="mb-2 block text-sm">Your Name *</Label>
+              <Input id="bf-name" name="name" placeholder="e.g. Ayesha Khan" value={form.name} onChange={handleChange} onBlur={() => validateField("name")} aria-invalid={!!errors.name} className={inputClass("name")} />
+              <FieldError name="name" />
+            </div>
+            <div>
+              <Label htmlFor="bf-phone" className="mb-2 block text-sm">Phone Number *</Label>
+              <Input id="bf-phone" name="phone" inputMode="tel" placeholder="e.g. +92 300 1234567" value={form.phone} onChange={handleChange} onBlur={() => validateField("phone")} aria-invalid={!!errors.phone} className={inputClass("phone")} />
+              <FieldError name="phone" />
+            </div>
+            <div>
+              <Label htmlFor="bf-email" className="mb-2 block text-sm">Email *</Label>
+              <Input id="bf-email" name="email" type="email" placeholder="you@example.com" value={form.email} onChange={handleChange} onBlur={() => validateField("email")} aria-invalid={!!errors.email} className={inputClass("email")} />
+              <FieldError name="email" />
+            </div>
+            <div>
+              <Label htmlFor="bf-city" className="mb-2 block text-sm">City</Label>
+              <Input id="bf-city" name="city" placeholder="e.g. Lahore" value={form.city} onChange={handleChange} onBlur={() => validateField("city")} aria-invalid={!!errors.city} className={inputClass("city")} />
+              <FieldError name="city" />
+            </div>
+            <div>
+              <Label htmlFor="bf-type" className="mb-2 block text-sm">Event Type *</Label>
+              <select
+                id="bf-type"
+                name="eventType"
+                value={form.eventType}
+                onChange={handleChange}
+                onBlur={() => validateField("eventType")}
+                aria-invalid={!!errors.eventType}
+                className={cn(
+                  "h-12 w-full rounded-lg border border-border bg-background/50 px-3 text-sm text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background",
+                  errors.eventType && "border-destructive focus:ring-destructive"
+                )}
+              >
+                <option value="">Select event type</option>
+                {eventTypes.map(t => <option key={t} value={t}>{t}</option>)}
+              </select>
+              <FieldError name="eventType" />
+            </div>
+            <div>
+              <Label htmlFor="bf-date" className="mb-2 block text-sm">Event Date *</Label>
+              <Input id="bf-date" name="eventDate" type="date" min={todayISO} value={form.eventDate} onChange={handleChange} onBlur={() => validateField("eventDate")} aria-invalid={!!errors.eventDate} className={inputClass("eventDate")} />
+              <FieldError name="eventDate" />
+            </div>
+            <div className="sm:col-span-2">
+              <Label htmlFor="bf-participants" className="mb-2 block text-sm">Number of Participants *</Label>
+              <Input id="bf-participants" name="participants" type="number" min={4} max={2000} placeholder="e.g. 40" value={form.participants} onChange={handleChange} onBlur={() => validateField("participants")} aria-invalid={!!errors.participants} className={inputClass("participants")} />
+              <p className="text-xs text-muted-foreground mt-1.5">Minimum 4 players — we scale up to 2000 guests.</p>
+              <FieldError name="participants" />
+            </div>
           </div>
-          <Textarea name="message" placeholder="Tell us about your event..." value={form.message} onChange={handleChange} className="bg-background/50 border-border min-h-[100px]" />
+
+          <div>
+            <Label className="mb-1 block text-sm">Preferred Time Slot *</Label>
+            <p className="text-xs text-muted-foreground mb-3">Pick when you'd like the arena set up.</p>
+            <div className="grid grid-cols-1 xs:grid-cols-3 gap-3">
+              {timeSlots.map(({ value, label, hint, icon: Icon }) => {
+                const active = form.eventTime === value;
+                return (
+                  <button
+                    type="button"
+                    key={value}
+                    onClick={() => setField("eventTime", value)}
+                    aria-pressed={active}
+                    className={cn(
+                      "rounded-xl border p-4 text-left transition-smooth hover:border-primary/60",
+                      active ? "border-primary bg-primary/10 shadow-soft" : "border-border bg-background/40",
+                      errors.eventTime && !active && "border-destructive/60"
+                    )}
+                  >
+                    <Icon className={cn("w-5 h-5 mb-2", active ? "text-primary" : "text-muted-foreground")} />
+                    <div className="font-semibold text-sm">{label}</div>
+                    <div className="text-xs text-muted-foreground">{hint}</div>
+                  </button>
+                );
+              })}
+            </div>
+            <FieldError name="eventTime" />
+          </div>
+
+          <div>
+            <Label className="mb-1 block text-sm">Choose a Package *</Label>
+            <p className="text-xs text-muted-foreground mb-3">Every package is customisable — this just helps us quote faster.</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {packages.map((pkg) => {
+                const active = form.packageName === pkg.value;
+                return (
+                  <button
+                    type="button"
+                    key={pkg.value}
+                    onClick={() => setField("packageName", pkg.value)}
+                    aria-pressed={active}
+                    className={cn(
+                      "relative rounded-xl border p-4 text-left transition-smooth hover:border-primary/60",
+                      active ? "border-primary bg-primary/10 shadow-soft" : "border-border bg-background/40",
+                      errors.packageName && !active && "border-destructive/60"
+                    )}
+                  >
+                    {active && <Check className="absolute top-3 right-3 w-4 h-4 text-primary" />}
+                    <div className="font-display font-bold">{pkg.label}</div>
+                    <div className="text-[11px] uppercase tracking-wide text-muted-foreground mb-2">{pkg.price}</div>
+                    <ul className="space-y-1">
+                      {pkg.points.map((p) => (
+                        <li key={p} className="text-xs text-muted-foreground leading-snug">• {p}</li>
+                      ))}
+                    </ul>
+                  </button>
+                );
+              })}
+            </div>
+            <FieldError name="packageName" />
+          </div>
+
+          <div>
+            <Label htmlFor="bf-message" className="mb-2 block text-sm">Anything else?</Label>
+            <Textarea id="bf-message" name="message" placeholder="Tell us about your venue, theme or special requests..." value={form.message} onChange={handleChange} onBlur={() => validateField("message")} maxLength={1000} className={cn("bg-background/50 border-border min-h-[100px]", errors.message && "border-destructive")} />
+            <div className="flex justify-between mt-1.5">
+              <FieldError name="message" />
+              <span className="text-xs text-muted-foreground ml-auto">{form.message?.length ?? 0}/1000</span>
+            </div>
+          </div>
+
           <div className="flex flex-col sm:flex-row gap-4 pt-1">
             <Button type="submit" variant="hero" size="lg" className="flex-1" disabled={submitting}>
               {submitting ? "Submitting..." : (<><CalendarCheck className="w-5 h-5" />Request Quote</>)}
